@@ -2,314 +2,972 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Test System</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test System</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        "Noto Sans TC", sans-serif;
-      background: #f4f6fa;
-      color: #26364a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 430px;
-    }
-
-    .brand {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .logo {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
-      background: #e7efff;
-      color: #315eae;
-      display: grid;
-      place-items: center;
-      font-size: 25px;
-      font-weight: 800;
-      margin: 0 auto 14px;
-    }
-
-    h1 {
-      font-size: 27px;
-      margin: 0 0 8px;
-    }
-
-    .subtitle {
-      color: #8290a3;
-      font-size: 14px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #e8edf4;
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 12px 35px rgba(35, 55, 90, .06);
-    }
-
-    h2 {
-      font-size: 20px;
-      margin: 0 0 7px;
-    }
-
-    .description {
-      color: #8995a6;
-      font-size: 13px;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 650;
-      margin: 17px 0 8px;
-    }
-
-    input {
-      width: 100%;
-      height: 48px;
-      border: 1px solid #dce3ed;
-      border-radius: 11px;
-      padding: 0 14px;
-      font-size: 15px;
-      outline: none;
-      background: #fbfcfe;
-    }
-
-    input:focus {
-      border-color: #7198dc;
-      box-shadow: 0 0 0 3px rgba(75, 125, 205, .1);
-    }
-
-    button {
-      width: 100%;
-      height: 49px;
-      border: 0;
-      border-radius: 11px;
-      margin-top: 24px;
-      background: #315eae;
-      color: white;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
-    .message {
-      display: none;
-      margin-top: 17px;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
-
-    .message.error {
-      display: block;
-      color: #a33b3b;
-      background: #fff0f0;
-    }
-
-    .message.success {
-      display: block;
-      color: #26734a;
-      background: #eaf8ef;
-    }
-
-    .footer {
-      text-align: center;
-      color: #a0aaba;
-      font-size: 12px;
-      margin-top: 22px;
-    }
-
-    .dashboard {
-      display: none;
-      text-align: center;
-    }
-
-    .dashboard p {
-      color: #718096;
-      line-height: 1.8;
-    }
-
-    .logout {
-      background: #edf2fa;
-      color: #315eae;
-    }
-  </style>
+<style>
+:root {
+  --blue:#3979bd;
+  --blue-dark:#245b96;
+  --blue-light:#eaf3fc;
+  --bg:#f4f7fb;
+  --card:#fff;
+  --text:#26384c;
+  --muted:#8291a3;
+  --line:#e5ebf2;
+  --gold:#c49b55;
+  --danger:#d65d65;
+  --green:#299b78;
+  --shadow:0 5px 22px rgba(42,73,109,.07);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input,select,textarea { font:inherit; }
+button { cursor:pointer; }
+.hidden { display:none!important; }
+#app { min-height:100vh; }
+.login-wrap {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:linear-gradient(145deg,#edf5ff,#f8fafc 60%,#f5f7fb);
+}
+.login-card {
+  width:100%;
+  max-width:420px;
+  background:white;
+  padding:38px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+}
+.logo {
+  width:52px;height:52px;border-radius:16px;
+  background:var(--blue-light);
+  color:var(--blue);
+  display:grid;place-items:center;
+  font-size:24px;font-weight:800;
+  margin-bottom:22px;
+}
+h1 { font-size:25px;margin:0 0 8px; }
+.subtitle { color:var(--muted);font-size:14px;margin-bottom:28px; }
+.field { margin:16px 0; }
+.field label {
+  display:block;font-size:13px;font-weight:650;
+  margin-bottom:8px;color:#53677e;
+}
+input,select,textarea {
+  width:100%;padding:12px 13px;
+  border:1px solid #dce4ed;border-radius:10px;
+  outline:none;background:#fff;color:var(--text);
+}
+input:focus,select:focus,textarea:focus {
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(57,121,189,.1);
+}
+textarea { min-height:100px;resize:vertical; }
+.btn {
+  border:0;border-radius:10px;padding:11px 17px;
+  font-weight:650;transition:.18s;
+}
+.btn:hover { transform:translateY(-1px);filter:brightness(.98); }
+.primary { background:var(--blue);color:white; }
+.secondary { background:var(--blue-light);color:var(--blue-dark); }
+.outline { background:white;border:1px solid var(--line);color:var(--text); }
+.danger { background:#fff0f0;color:var(--danger); }
+.success { background:#eaf8f3;color:var(--green); }
+.full { width:100%; }
+.small { padding:7px 11px;font-size:13px; }
+.topbar {
+  height:68px;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;position:sticky;top:0;z-index:10;
+}
+.brand { display:flex;align-items:center;gap:11px;font-weight:800; }
+.brand-mark {
+  background:var(--blue-light);color:var(--blue);
+  width:36px;height:36px;border-radius:11px;
+  display:grid;place-items:center;
+}
+.user-area { display:flex;align-items:center;gap:12px;font-size:13px; }
+.layout { display:flex;max-width:1400px;margin:auto;min-height:calc(100vh - 68px); }
+.sidebar {
+  width:225px;padding:24px 15px;border-right:1px solid var(--line);
+  background:#fff;flex-shrink:0;
+}
+.nav-label {
+  color:#9aa7b5;font-size:11px;font-weight:700;
+  padding:10px 12px;letter-spacing:1px;
+}
+.nav-btn {
+  width:100%;display:flex;align-items:center;gap:10px;
+  padding:12px;border:0;border-radius:10px;
+  background:transparent;text-align:left;color:#64768a;
+  margin:3px 0;font-weight:600;
+}
+.nav-btn.active,.nav-btn:hover { background:var(--blue-light);color:var(--blue-dark); }
+.main { flex:1;min-width:0;padding:30px; }
+.page-head {
+  display:flex;justify-content:space-between;align-items:center;
+  gap:14px;margin-bottom:24px;flex-wrap:wrap;
+}
+.page-head h2 { margin:0;font-size:23px; }
+.muted { color:var(--muted);font-size:13px; }
+.grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px; }
+.card {
+  background:var(--card);border:1px solid var(--line);
+  border-radius:15px;padding:20px;box-shadow:var(--shadow);
+  margin-bottom:16px;
+}
+.stat { font-size:28px;font-weight:800;margin:9px 0 2px; }
+.stat-label { font-size:13px;color:var(--muted); }
+.section-title { font-size:16px;font-weight:750;margin:0 0 16px; }
+.row { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+.between { justify-content:space-between; }
+.table-wrap { overflow-x:auto; }
+table { border-collapse:collapse;width:100%;min-width:550px; }
+th,td { text-align:left;padding:13px 12px;border-bottom:1px solid var(--line);font-size:13px; }
+th { color:var(--muted);font-weight:700;background:#fafbfd; }
+.badge {
+  display:inline-block;padding:5px 9px;border-radius:20px;
+  background:var(--blue-light);color:var(--blue-dark);font-size:11px;
+}
+.badge.green { background:#e8f7f0;color:#238461; }
+.badge.gray { background:#f0f2f5;color:#758397; }
+.empty { text-align:center;color:var(--muted);padding:35px 10px;font-size:14px; }
+.form-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+.question-box {
+  border:1px solid var(--line);border-radius:13px;
+  padding:17px;margin:12px 0;background:white;
+}
+.option-row { display:flex;gap:9px;align-items:center;margin:9px 0; }
+.option-row input[type=checkbox] { width:auto; }
+.option-row input[type=text] { flex:1; }
+.modal-bg {
+  position:fixed;inset:0;background:rgba(20,35,55,.42);
+  display:flex;align-items:center;justify-content:center;
+  padding:18px;z-index:30;
+}
+.modal {
+  width:100%;max-width:720px;max-height:90vh;overflow:auto;
+  background:white;border-radius:18px;padding:24px;
+  box-shadow:0 20px 70px rgba(0,0,0,.18);
+}
+.modal-head { display:flex;justify-content:space-between;align-items:center;margin-bottom:18px; }
+.modal-head h3 { margin:0; }
+.exam-layout { max-width:1000px;margin:auto; }
+.exam-top {
+  background:white;border:1px solid var(--line);border-radius:14px;
+  padding:16px 20px;display:flex;justify-content:space-between;
+  align-items:center;gap:12px;margin-bottom:16px;
+}
+.timer { font-weight:800;color:var(--blue-dark);font-size:20px;font-variant-numeric:tabular-nums; }
+.exam-question { min-height:260px; }
+.question-content { font-size:17px;line-height:1.85;white-space:pre-wrap; }
+.answer-option {
+  display:flex;gap:12px;align-items:flex-start;
+  padding:13px;border:1px solid var(--line);
+  border-radius:10px;margin:10px 0;cursor:pointer;
+}
+.answer-option:hover { background:#f7faff;border-color:#b8d2ec; }
+.answer-option input { width:auto;margin-top:4px; }
+.exam-footer { display:flex;justify-content:space-between;gap:10px;margin-top:20px; }
+.qnav { display:flex;gap:7px;flex-wrap:wrap;margin-top:15px; }
+.qnav button {
+  width:36px;height:36px;border-radius:9px;
+  border:1px solid var(--line);background:white;color:#65758a;
+}
+.qnav button.done { background:#e8f5ef;color:#24845f;border-color:#c5e8d9; }
+.qnav button.current { border:2px solid var(--blue);color:var(--blue); }
+.toast {
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  background:#26384c;color:white;padding:12px 18px;border-radius:10px;
+  z-index:99;font-size:13px;box-shadow:var(--shadow);
+  max-width:90%;text-align:center;
+}
+@media(max-width:850px) {
+  .sidebar { width:185px; }
+  .main { padding:20px; }
+  .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:620px) {
+  .topbar { padding:0 14px;height:60px; }
+  .layout { display:block; }
+  .sidebar {
+    width:100%;display:flex;overflow-x:auto;padding:8px;
+    border-right:0;border-bottom:1px solid var(--line);
+  }
+  .nav-label { display:none; }
+  .nav-btn { width:auto;white-space:nowrap;padding:10px 12px; }
+  .main { padding:16px; }
+  .grid { grid-template-columns:1fr 1fr;gap:10px; }
+  .card { padding:15px; }
+  .login-card { padding:27px 22px; }
+  .form-grid { grid-template-columns:1fr; }
+  .user-area span { display:none; }
+}
+</style>
 </head>
 
 <body>
-  <main class="container">
-
-    <header class="brand">
+<div id="app">
+  <div class="login-wrap">
+    <div class="login-card">
       <div class="logo">T</div>
       <h1>Test System</h1>
       <div class="subtitle">線上測驗與題庫管理平台</div>
-    </header>
-
-    <section class="card" id="loginCard">
-      <h2>歡迎回來</h2>
-      <div class="description">請使用管理員提供的帳號登入</div>
-
       <form id="loginForm">
-        <label for="username">使用者帳號</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="請輸入帳號"
-          autocomplete="username"
-          required
-        >
-
-        <label for="password">登入密碼</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="請輸入密碼"
-          autocomplete="current-password"
-          required
-        >
-
-        <button id="loginButton" type="submit">登入系統</button>
+        <div class="field">
+          <label>帳號</label>
+          <input id="username" autocomplete="username" required placeholder="請輸入帳號">
+        </div>
+        <div class="field">
+          <label>密碼</label>
+          <input id="password" type="password" autocomplete="current-password" required placeholder="請輸入密碼">
+        </div>
+        <button class="btn primary full" id="loginBtn">登入系統</button>
       </form>
+      <p class="muted" style="margin-top:18px;text-align:center">請使用管理員提供的帳號登入</p>
+    </div>
+  </div>
+</div>
 
-      <div id="message" class="message"></div>
-    </section>
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
 
-    <section class="card dashboard" id="dashboard">
-      <div class="logo">✓</div>
-      <h2>登入成功</h2>
-      <p id="welcomeText"></p>
-      <p id="roleText"></p>
-      <button class="logout" id="logoutButton">登出帳號</button>
-    </section>
+<script>
+/* =========================================
+   Supabase 設定
+   將 YOUR_PUBLISHABLE_KEY 換成舊版的 Publishable Key
+========================================= */
+const SUPABASE_URL = 'https://engbrxllahnciuysupxh.supabase.co';
+const SUPABASE_KEY = 'YOUR_PUBLISHABLE_KEY';
 
-    <footer class="footer">
-      Test System · Secure Learning Platform
-    </footer>
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  </main>
+let currentUser = null;
+let currentProfile = null;
+let currentPage = 'home';
+let questionsCache = [];
+let classesCache = [];
+let examQuestionsSelected = [];
+let activeAttempt = null;
+let activeExam = null;
+let activeQuestions = [];
+let currentQuestionIndex = 0;
+let selectedAnswers = {};
+let examTimer = null;
+let remainingSeconds = 0;
+let saving = false;
 
-  <script>
-    // Supabase 連線設定
-    const SUPABASE_URL =
-      "https://engbrxllahnciuysupxh.supabase.co";
+const app = document.getElementById('app');
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_v2ewwLeaeciS3crf7XEb0A__IfHErpP";
+function toast(message) {
+  const root = document.getElementById('toastRoot');
+  root.innerHTML = `<div class="toast">${escapeHtml(message)}</div>`;
+  setTimeout(() => root.innerHTML = '', 2800);
+}
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+function safeJson(value) {
+  return JSON.stringify(value ?? null);
+}
+function renderMath() {
+  if (window.MathJax?.typesetPromise) {
+    window.MathJax.typesetPromise().catch(console.error);
+  }
+}
+function formatDate(value) {
+  if (!value) return '未設定';
+  return new Date(value).toLocaleString('zh-TW', {hour12:false});
+}
+function showModal(content) {
+  document.getElementById('modalRoot').innerHTML =
+    `<div class="modal-bg" id="modalBg"><div class="modal">${content}</div></div>`;
+  document.getElementById('modalBg').addEventListener('click', e => {
+    if (e.target.id === 'modalBg') closeModal();
+  });
+  renderMath();
+}
+function closeModal() {
+  document.getElementById('modalRoot').innerHTML = '';
+}
+async function queryOrThrow(promise) {
+  const {data,error} = await promise;
+  if (error) throw error;
+  return data;
+}
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
-
-    const loginForm = document.getElementById("loginForm");
-    const loginButton = document.getElementById("loginButton");
-    const message = document.getElementById("message");
-    const loginCard = document.getElementById("loginCard");
-    const dashboard = document.getElementById("dashboard");
-
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = "message " + type;
-    }
-
-    function showDashboard(profile) {
-      loginCard.style.display = "none";
-      dashboard.style.display = "block";
-
-      document.getElementById("welcomeText").textContent =
-        "您好，" + (profile.display_name || profile.username);
-
-      document.getElementById("roleText").textContent =
-        "帳號權限：" +
-        (profile.role === "teacher" ? "教師" : "學生");
-    }
-
-    loginForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const username = document.getElementById("username")
-        .value.trim().toLowerCase();
-
-      const password = document.getElementById("password").value;
-
-      if (!username || !password) {
-        showMessage("請輸入帳號及密碼。", "error");
-        return;
-      }
-
-      loginButton.disabled = true;
-      loginButton.textContent = "登入中……";
-      message.className = "message";
-
-      try {
-        const email = username + "@test-system.example.com";
-
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-
-        if (error) throw error;
-
-        const { data: profile, error: profileError } =
-          await supabaseClient
-            .from("profiles")
-            .select("username, display_name, role")
-            .eq("id", data.user.id)
-            .single();
-
-        if (profileError) throw profileError;
-
-        showDashboard(profile);
-
-      } catch (error) {
-        console.error(error);
-        showMessage(
-          "登入失敗：" + (error.message || "請檢查帳號及密碼"),
-          "error"
-        );
-      } finally {
-        loginButton.disabled = false;
-        loginButton.textContent = "登入系統";
-      }
+/* LOGIN */
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY') {
+    toast('請先填入 Supabase Publishable Key');
+    return;
+  }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = '登入中…';
+  try {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const {data,error} = await db.auth.signInWithPassword({
+      email: username + '@test-system.example.com',
+      password
     });
+    if (error) throw error;
+    currentUser = data.user;
+    await loadProfile();
+    await renderApp();
+  } catch(err) {
+    toast('登入失敗：' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '登入系統';
+  }
+});
 
-    document.getElementById("logoutButton")
-      .addEventListener("click", async function() {
-        await supabaseClient.auth.signOut();
-        dashboard.style.display = "none";
-        loginCard.style.display = "block";
-        loginForm.reset();
-        message.className = "message";
-      });
-  </script>
+async function loadProfile() {
+  currentProfile = await queryOrThrow(
+    db.from('profiles')
+      .select('id,username,display_name,role')
+      .eq('id',currentUser.id)
+      .single()
+  );
+}
+async function logout() {
+  if (examTimer) clearInterval(examTimer);
+  await db.auth.signOut();
+  currentUser = null;
+  currentProfile = null;
+  location.reload();
+}
+
+/* APP SHELL */
+async function renderApp() {
+  const isTeacher = currentProfile.role === 'teacher';
+  app.innerHTML = `
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">T</div>Test System</div>
+      <div class="user-area">
+        <span>${escapeHtml(currentProfile.display_name || currentProfile.username)} · ${isTeacher?'教師':'學生'}</span>
+        <button class="btn outline small" onclick="logout()">登出</button>
+      </div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="nav-label">MENU</div>
+        <button class="nav-btn active" data-page="home" onclick="goPage('home')">⌂　總覽</button>
+        ${isTeacher ? `
+          <button class="nav-btn" data-page="questions" onclick="goPage('questions')">▤　題庫管理</button>
+          <button class="nav-btn" data-page="exams" onclick="goPage('exams')">▣　考卷管理</button>
+          <button class="nav-btn" data-page="classes" onclick="goPage('classes')">▥　班級管理</button>
+          <button class="nav-btn" data-page="scores" onclick="goPage('scores')">▧　成績查詢</button>
+        ` : `
+          <button class="nav-btn" data-page="myexams" onclick="goPage('myexams')">▣　我的測驗</button>
+          <button class="nav-btn" data-page="history" onclick="goPage('history')">◷　測驗紀錄</button>
+        `}
+      </aside>
+      <main class="main" id="mainContent"></main>
+    </div>`;
+  await goPage('home');
+}
+async function goPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active',b.dataset.page === page);
+  });
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="card empty">資料載入中…</div>';
+  try {
+    if (currentProfile.role === 'teacher') {
+      if (page === 'home') await teacherHome();
+      if (page === 'questions') await teacherQuestions();
+      if (page === 'exams') await teacherExams();
+      if (page === 'classes') await teacherClasses();
+      if (page === 'scores') await teacherScores();
+    } else {
+      if (page === 'home') await studentHome();
+      if (page === 'myexams') await studentExams();
+      if (page === 'history') await studentHistory();
+    }
+  } catch(err) {
+    main.innerHTML = `<div class="card">載入失敗：${escapeHtml(err.message)}</div>`;
+  }
+}
+
+/* TEACHER HOME */
+async function teacherHome() {
+  const [qs,es,cs,ps] = await Promise.all([
+    db.from('questions').select('id',{count:'exact',head:true}),
+    db.from('exams').select('id',{count:'exact',head:true}),
+    db.from('classes').select('id',{count:'exact',head:true}),
+    db.from('profiles').select('id',{count:'exact',head:true}).eq('role','student')
+  ]);
+  document.getElementById('mainContent').innerHTML = `
+    <div class="page-head"><div><h2>教師總覽</h2><div class="muted">歡迎回到 Test System</div></div></div>
+    <div class="grid">
+      <div class="card"><div class="stat-label">題庫題目</div><div class="stat">${qs.count ?? 0}</div></div>
+      <div class="card"><div class="stat-label">考卷數量</div><div class="stat">${es.count ?? 0}</div></div>
+      <div class="card"><div class="stat-label">班級數量</div><div class="stat">${cs.count ?? 0}</div></div>
+      <div class="card"><div class="stat-label">學生帳號</div><div class="stat">${ps.count ?? 0}</div></div>
+    </div>
+    <div class="card"><h3 class="section-title">快速操作</h3>
+      <div class="row">
+        <button class="btn primary" onclick="goPage('questions')">新增題目</button>
+        <button class="btn secondary" onclick="goPage('exams')">建立考卷</button>
+        <button class="btn outline" onclick="goPage('classes')">管理班級</button>
+      </div>
+    </div>`;
+}
+
+/* QUESTION BANK */
+async function teacherQuestions() {
+  questionsCache = await queryOrThrow(
+    db.from('questions')
+      .select('*')
+      .order('created_at',{ascending:false})
+  );
+  document.getElementById('mainContent').innerHTML = `
+    <div class="page-head">
+      <div><h2>題庫管理</h2><div class="muted">新增、編輯及管理測驗題目</div></div>
+      <button class="btn primary" onclick="questionEditor()">＋ 新增題目</button>
+    </div>
+    <div class="card">
+      <div class="row between">
+        <h3 class="section-title">所有題目（${questionsCache.length}）</h3>
+        <input style="max-width:230px" id="questionSearch" placeholder="搜尋題目…" oninput="filterQuestions()">
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>科目</th><th>題型</th><th>題目</th><th>操作</th></tr></thead>
+        <tbody id="questionRows">${questionRows(questionsCache)}</tbody>
+      </table></div>
+    </div>`;
+}
+function questionRows(items) {
+  if (!items.length) return '<tr><td colspan="4" class="empty">目前沒有題目</td></tr>';
+  return items.map(q => `
+    <tr>
+      <td>${escapeHtml(q.subject)}</td>
+      <td><span class="badge">${q.question_type==='multiple'?'多選題':'單選題'}</span></td>
+      <td>${escapeHtml(q.content.slice(0,75))}</td>
+      <td><div class="row">
+        <button class="btn secondary small" onclick="questionEditor('${q.id}')">編輯</button>
+        <button class="btn danger small" onclick="deleteQuestion('${q.id}')">刪除</button>
+      </div></td>
+    </tr>`).join('');
+}
+function filterQuestions() {
+  const word = document.getElementById('questionSearch').value.toLowerCase();
+  document.getElementById('questionRows').innerHTML =
+    questionRows(questionsCache.filter(q =>
+      (q.content+' '+q.subject).toLowerCase().includes(word)
+    ));
+}
+function questionEditor(id=null) {
+  const q = questionsCache.find(x => x.id===id);
+  const opts = q?.options || ['','','',''];
+  const correct = q?.correct_answer;
+  showModal(`
+    <div class="modal-head"><h3>${q?'編輯題目':'新增題目'}</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
+    <form id="questionForm">
+      <div class="form-grid">
+        <div class="field"><label>科目</label><input id="qSubject" required value="${escapeHtml(q?.subject||'')}"></div>
+        <div class="field"><label>題型</label>
+          <select id="qType">
+            <option value="single" ${q?.question_type!=='multiple'?'selected':''}>單選題</option>
+            <option value="multiple" ${q?.question_type==='multiple'?'selected':''}>多選題</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>題目內容（支援 LaTeX，例如 \\(x^2\\)）</label>
+        <textarea id="qContent" required>${escapeHtml(q?.content||'')}</textarea>
+      </div>
+      <div class="field"><label>選項（請填寫至少兩個）</label>
+        ${[0,1,2,3].map(i=>`
+          <div class="option-row">
+            <span>${String.fromCharCode(65+i)}.</span>
+            <input id="opt${i}" value="${escapeHtml(opts[i]||'')}" placeholder="選項內容">
+            <input type="${q?.question_type==='multiple'?'checkbox':'radio'}" name="correctOption" value="${i}" ${isCorrect(correct,i)?'checked':''} title="正確答案">
+          </div>`).join('')}
+        <div class="muted">勾選／選取正確答案。多選題可以選多個。</div>
+      </div>
+      <div class="field"><label>解析（選填）</label><textarea id="qExplanation">${escapeHtml(q?.explanation||'')}</textarea></div>
+      <div class="field"><label>圖片網址（選填）</label><input id="qImage" value="${escapeHtml(q?.image_url||'')}" placeholder="https://…"></div>
+      <button class="btn primary full">${q?'儲存修改':'新增題目'}</button>
+    </form>`);
+  document.getElementById('qType').addEventListener('change',e=>{
+    const type=e.target.value;
+    document.querySelectorAll('input[name="correctOption"]').forEach(el=>{
+      el.type=type==='multiple'?'checkbox':'radio';
+      el.checked=false;
+    });
+  });
+  document.getElementById('questionForm').addEventListener('submit',e=>saveQuestion(e,id));
+}
+function isCorrect(answer,index) {
+  if (Array.isArray(answer)) return answer.includes(index);
+  return answer===index;
+}
+async function saveQuestion(e,id) {
+  e.preventDefault();
+  try {
+    const type=document.getElementById('qType').value;
+    const options=[0,1,2,3].map(i=>document.getElementById('opt'+i).value.trim()).filter(Boolean);
+    if(options.length<2) throw new Error('至少需要兩個選項');
+    const checked=[...document.querySelectorAll('input[name="correctOption"]:checked')].map(x=>Number(x.value));
+    if(!checked.length) throw new Error('請選擇正確答案');
+    if(type==='single' && checked.length!==1) throw new Error('單選題只能選一個正確答案');
+    const payload={
+      subject:document.getElementById('qSubject').value.trim(),
+      question_type:type,
+      content:document.getElementById('qContent').value.trim(),
+      options,
+      correct_answer:type==='multiple'?checked:checked[0],
+      explanation:document.getElementById('qExplanation').value.trim(),
+      image_url:document.getElementById('qImage').value.trim()||null,
+      created_by:currentUser.id
+    };
+    if(id) await queryOrThrow(db.from('questions').update(payload).eq('id',id));
+    else await queryOrThrow(db.from('questions').insert(payload));
+    closeModal();toast('題目已儲存');await teacherQuestions();
+  } catch(err) { toast('儲存失敗：'+err.message); }
+}
+async function deleteQuestion(id) {
+  if(!confirm('確定刪除這道題目？若已加入考卷，可能因外鍵關聯而無法刪除。')) return;
+  try {
+    await queryOrThrow(db.from('questions').delete().eq('id',id));
+    toast('已刪除');await teacherQuestions();
+  } catch(err) { toast('刪除失敗：'+err.message); }
+}
+
+/* CLASSES */
+async function teacherClasses() {
+  classesCache=await queryOrThrow(db.from('classes').select('*').order('created_at',{ascending:false}));
+  const members=await queryOrThrow(db.from('class_members').select('class_id,student_id'));
+  document.getElementById('mainContent').innerHTML=`
+    <div class="page-head"><div><h2>班級管理</h2><div class="muted">建立班級及將既有學生帳號加入班級</div></div>
+    <button class="btn primary" onclick="createClass()">＋ 新增班級</button></div>
+    <div class="grid">${classesCache.map(c=>`
+      <div class="card">
+        <div class="row between"><h3>${escapeHtml(c.name)}</h3><span class="badge">${members.filter(m=>m.class_id===c.id).length} 位學生</span></div>
+        <button class="btn secondary small" onclick="manageMembers('${c.id}')">管理學生</button>
+      </div>`).join('')||'<div class="card empty">尚未建立班級</div>'}</div>`;
+}
+async function createClass() {
+  const name=prompt('請輸入班級名稱');
+  if(!name?.trim()) return;
+  try {
+    await queryOrThrow(db.from('classes').insert({name:name.trim()}));
+    toast('班級已建立');await teacherClasses();
+  } catch(err) { toast('建立失敗：'+err.message); }
+}
+async function manageMembers(classId) {
+  try {
+    const members=await queryOrThrow(db.from('class_members').select('student_id').eq('class_id',classId));
+    const ids=members.map(m=>m.student_id);
+    const students=await queryOrThrow(db.from('profiles').select('id,username,display_name').eq('role','student'));
+    showModal(`
+      <div class="modal-head"><h3>班級學生</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
+      <div class="field"><label>加入學生帳號</label>
+        <select id="memberSelect"><option value="">選擇學生</option>
+        ${students.filter(s=>!ids.includes(s.id)).map(s=>`<option value="${s.id}">${escapeHtml(s.display_name||s.username)} (${escapeHtml(s.username)})</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn primary" onclick="addMember('${classId}')">加入班級</button>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <h4>目前學生</h4>
+      ${students.filter(s=>ids.includes(s.id)).map(s=>`
+        <div class="row between" style="padding:10px 0;border-bottom:1px solid var(--line)">
+          <span>${escapeHtml(s.display_name||s.username)}（${escapeHtml(s.username)}）</span>
+          <button class="btn danger small" onclick="removeMember('${classId}','${s.id}')">移除</button>
+        </div>`).join('')||'<div class="empty">尚無學生</div>'}`);
+  } catch(err) { toast(err.message); }
+}
+async function addMember(classId) {
+  const studentId=document.getElementById('memberSelect').value;
+  if(!studentId) return toast('請先選擇學生');
+  try {
+    await queryOrThrow(db.from('class_members').insert({class_id:classId,student_id:studentId}));
+    toast('已加入班級');await manageMembers(classId);
+  } catch(err) { toast('加入失敗：'+err.message); }
+}
+async function removeMember(classId,studentId) {
+  if(!confirm('確定將學生移出班級？')) return;
+  try {
+    await queryOrThrow(db.from('class_members').delete().eq('class_id',classId).eq('student_id',studentId));
+    toast('已移除');await manageMembers(classId);
+  } catch(err) { toast(err.message); }
+}
+
+/* EXAMS */
+async function teacherExams() {
+  const exams=await queryOrThrow(db.from('exams').select('*').order('created_at',{ascending:false}));
+  document.getElementById('mainContent').innerHTML=`
+    <div class="page-head"><div><h2>考卷管理</h2><div class="muted">建立考卷、選擇題目及派發測驗</div></div>
+    <button class="btn primary" onclick="createExam()">＋ 建立考卷</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>考卷名稱</th><th>科目</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead>
+      <tbody>${exams.map(ex=>`
+        <tr><td>${escapeHtml(ex.title)}</td><td>${escapeHtml(ex.subject||'')}</td>
+        <td>${ex.duration_minutes} 分鐘</td>
+        <td><span class="badge ${ex.is_published?'green':'gray'}">${ex.is_published?'已發布':'草稿'}</span></td>
+        <td><div class="row">
+          <button class="btn secondary small" onclick="assignExam('${ex.id}')">派發</button>
+          <button class="btn outline small" onclick="togglePublish('${ex.id}',${!ex.is_published})">${ex.is_published?'取消發布':'發布'}</button>
+        </div></td></tr>`).join('')||'<tr><td colspan="5" class="empty">尚無考卷</td></tr>'}</tbody>
+    </table></div></div>`;
+}
+async function createExam() {
+  try {
+    questionsCache=await queryOrThrow(db.from('questions').select('*').order('created_at',{ascending:false}));
+    if(!questionsCache.length) return toast('請先建立題庫題目');
+    showModal(`
+      <div class="modal-head"><h3>建立考卷</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
+      <form id="examForm">
+        <div class="form-grid">
+          <div class="field"><label>考卷名稱</label><input id="examTitle" required></div>
+          <div class="field"><label>科目</label><input id="examSubject" required></div>
+          <div class="field"><label>作答時間（分鐘）</label><input id="examDuration" type="number" min="1" value="60" required></div>
+          <div class="field"><label>開始時間（選填）</label><input id="examStart" type="datetime-local"></div>
+          <div class="field"><label>截止時間（選填）</label><input id="examEnd" type="datetime-local"></div>
+        </div>
+        <div class="field"><label>題目選擇</label>
+          <div style="max-height:260px;overflow:auto">
+          ${questionsCache.map(q=>`
+            <label class="answer-option">
+              <input type="checkbox" name="examQuestion" value="${q.id}">
+              <span><b>${escapeHtml(q.subject)}</b> · ${escapeHtml(q.content.slice(0,110))}</span>
+            </label>`).join('')}
+          </div>
+        </div>
+        <button class="btn primary full">建立考卷</button>
+      </form>`);
+    document.getElementById('examForm').addEventListener('submit',saveExam);
+  } catch(err) { toast(err.message); }
+}
+async function saveExam(e) {
+  e.preventDefault();
+  try {
+    const selected=[...document.querySelectorAll('input[name="examQuestion"]:checked')].map(x=>x.value);
+    if(!selected.length) throw new Error('至少選擇一道題目');
+    const payload={
+      title:document.getElementById('examTitle').value.trim(),
+      subject:document.getElementById('examSubject').value.trim(),
+      duration_minutes:Number(document.getElementById('examDuration').value),
+      start_at:document.getElementById('examStart').value?new Date(document.getElementById('examStart').value).toISOString():null,
+      end_at:document.getElementById('examEnd').value?new Date(document.getElementById('examEnd').value).toISOString():null,
+      is_published:false,show_answers:false,created_by:currentUser.id
+    };
+    const exam=await queryOrThrow(db.from('exams').insert(payload).select().single());
+    const links=selected.map((id,i)=>({exam_id:exam.id,question_id:id,question_order:i+1,points:100/selected.length}));
+    await queryOrThrow(db.from('exam_questions').insert(links));
+    closeModal();toast('考卷建立成功');await teacherExams();
+  } catch(err) { toast('建立失敗：'+err.message); }
+}
+async function togglePublish(id,published) {
+  try {
+    await queryOrThrow(db.from('exams').update({is_published:published}).eq('id',id));
+    toast(published?'考卷已發布':'已取消發布');await teacherExams();
+  } catch(err) { toast(err.message); }
+}
+async function assignExam(examId) {
+  try {
+    const [classes,students,existing]=await Promise.all([
+      db.from('classes').select('*'),
+      db.from('profiles').select('id,username,display_name').eq('role','student'),
+      db.from('exam_assignments').select('*').eq('exam_id',examId)
+    ]);
+    if(classes.error) throw classes.error;
+    if(students.error) throw students.error;
+    if(existing.error) throw existing.error;
+    showModal(`
+      <div class="modal-head"><h3>派發考卷</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
+      <div class="field"><label>指定班級</label>
+        <select id="assignClass"><option value="">選擇班級</option>
+        ${classes.data.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}</select>
+      </div>
+      <button class="btn primary" onclick="assignClassExam('${examId}')">派發給班級</button>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <div class="field"><label>指定個別學生</label>
+        <select id="assignStudent"><option value="">選擇學生</option>
+        ${students.data.map(s=>`<option value="${s.id}">${escapeHtml(s.display_name||s.username)} (${escapeHtml(s.username)})</option>`).join('')}</select>
+      </div>
+      <button class="btn secondary" onclick="assignStudentExam('${examId}')">派發給學生</button>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <h4>目前派發紀錄</h4>
+      ${existing.data.map(a=>`<div class="muted" style="padding:6px 0">${a.class_id?'班級派發':'個別學生派發'} · ${escapeHtml(a.class_id||a.student_id)}</div>`).join('')||'<div class="empty">尚無派發紀錄</div>'}`);
+  } catch(err) { toast('載入派發資訊失敗：'+err.message); }
+}
+async function assignClassExam(examId) {
+  const classId=document.getElementById('assignClass').value;
+  if(!classId) return toast('請選擇班級');
+  try {
+    await queryOrThrow(db.from('exam_assignments').insert({exam_id:examId,class_id:classId,assigned_by:currentUser.id}));
+    toast('已派發給班級');await assignExam(examId);
+  } catch(err) { toast('派發失敗：'+err.message); }
+}
+async function assignStudentExam(examId) {
+  const studentId=document.getElementById('assignStudent').value;
+  if(!studentId) return toast('請選擇學生');
+  try {
+    await queryOrThrow(db.from('exam_assignments').insert({exam_id:examId,student_id:studentId,assigned_by:currentUser.id}));
+    toast('已派發給學生');await assignExam(examId);
+  } catch(err) { toast('派發失敗：'+err.message); }
+}
+
+/* STUDENT */
+async function studentHome() {
+  const exams=await queryOrThrow(db.rpc('get_assigned_exams'));
+  const attempts=await queryOrThrow(db.from('attempts').select('id,status,score').eq('student_id',currentUser.id));
+  document.getElementById('mainContent').innerHTML=`
+    <div class="page-head"><div><h2>學生總覽</h2><div class="muted">歡迎，${escapeHtml(currentProfile.display_name||currentProfile.username)}</div></div></div>
+    <div class="grid">
+      <div class="card"><div class="stat-label">可參加測驗</div><div class="stat">${exams.length}</div></div>
+      <div class="card"><div class="stat-label">已完成測驗</div><div class="stat">${attempts.filter(a=>a.status==='submitted').length}</div></div>
+      <div class="card"><div class="stat-label">進行中</div><div class="stat">${attempts.filter(a=>a.status==='in_progress').length}</div></div>
+    </div>
+    <div class="card"><h3 class="section-title">開始測驗</h3><button class="btn primary" onclick="goPage('myexams')">查看我的測驗</button></div>`;
+}
+async function studentExams() {
+  const exams=await queryOrThrow(db.rpc('get_assigned_exams'));
+  const attempts=await queryOrThrow(db.from('attempts').select('exam_id,status').eq('student_id',currentUser.id));
+  const main=document.getElementById('mainContent');
+  main.innerHTML=`
+    <div class="page-head"><div><h2>我的測驗</h2><div class="muted">以下是已分配給你的考試</div></div></div>
+    ${exams.map(ex=>{
+      const attempt=attempts.find(a=>a.exam_id===ex.exam_id);
+      const expired=ex.end_at && new Date(ex.end_at)<new Date();
+      const notStarted=ex.start_at && new Date(ex.start_at)>new Date();
+      const status=attempt?.status==='submitted'?'已完成':attempt?.status==='in_progress'?'作答中':expired?'已截止':notStarted?'尚未開始':'尚未作答';
+      return `<div class="card row between">
+        <div><h3 style="margin:0 0 8px">${escapeHtml(ex.title)}</h3>
+          <div class="muted">${escapeHtml(ex.subject||'')} · ${ex.duration_minutes} 分鐘</div>
+          <div class="muted" style="margin-top:7px">開始：${formatDate(ex.start_at)}　截止：${formatDate(ex.end_at)}</div>
+        </div>
+        <div class="row"><span class="badge">${status}</span>
+        <button class="btn primary" ${attempt?.status==='submitted'||expired||notStarted?'disabled':''}
+          onclick="beginExam('${ex.exam_id}',${ex.duration_minutes},'${escapeHtml(ex.title)}')">${attempt?.status==='in_progress'?'繼續測驗':'開始測驗'}</button></div>
+      </div>`;
+    }).join('')||'<div class="card empty">目前沒有分配給你的考試</div>'}`;
+}
+async function beginExam(examId,duration,title) {
+  try {
+    const attemptId=await queryOrThrow(db.rpc('start_exam',{p_exam_id:examId}));
+    activeAttempt=attemptId;
+    activeExam={id:examId,duration,title};
+    activeQuestions=await queryOrThrow(db.rpc('get_exam_questions',{p_attempt_id:attemptId}));
+    if(!activeQuestions.length) throw new Error('這份考卷沒有題目');
+    selectedAnswers={};
+    currentQuestionIndex=0;
+    remainingSeconds=duration*60;
+    renderExam();
+    startTimer();
+  } catch(err) { toast('無法開始測驗：'+err.message); }
+}
+function startTimer() {
+  if(examTimer) clearInterval(examTimer);
+  examTimer=setInterval(()=>{
+    remainingSeconds--;
+    const el=document.getElementById('timerDisplay');
+    if(el) el.textContent=timerText();
+    if(remainingSeconds<=0) {
+      clearInterval(examTimer);
+      toast('時間到，正在提交測驗');
+      submitExam(true);
+    }
+  },1000);
+}
+function timerText() {
+  const m=Math.floor(Math.max(0,remainingSeconds)/60);
+  const s=Math.max(0,remainingSeconds)%60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function renderExam() {
+  const q=activeQuestions[currentQuestionIndex];
+  const opts=q.options||[];
+  const selected=selectedAnswers[q.question_id];
+  document.getElementById('mainContent').innerHTML=`
+    <div class="exam-layout">
+      <div class="exam-top">
+        <div><b>${escapeHtml(activeExam.title)}</b><div class="muted">第 ${currentQuestionIndex+1} / ${activeQuestions.length} 題</div></div>
+        <div><div class="muted">剩餘時間</div><div class="timer" id="timerDisplay">${timerText()}</div></div>
+      </div>
+      <div class="card exam-question">
+        <div class="row between"><span class="badge">${q.question_type==='multiple'?'多選題':'單選題'}</span><span class="muted">${q.points} 分</span></div>
+        <div class="question-content" style="margin:20px 0">${escapeHtml(q.content).replace(/\n/g,'<br>')}</div>
+        ${q.image_url?`<img src="${escapeHtml(q.image_url)}" style="max-width:100%;border-radius:10px;margin-bottom:15px">`:''}
+        <div id="answerOptions">
+          ${opts.map((o,i)=>`
+            <label class="answer-option">
+              <input type="${q.question_type==='multiple'?'checkbox':'radio'}"
+                name="answer" value="${i}" ${Array.isArray(selected)?(selected.includes(i)?'checked':''):(selected===i?'checked':'')}
+                onchange="changeAnswer(${i},${q.question_type==='multiple'})">
+              <span><b>${String.fromCharCode(65+i)}.</b> ${escapeHtml(o)}</span>
+            </label>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="row between"><b>題目導航</b><span class="muted">綠色代表已作答</span></div>
+        <div class="qnav">${activeQuestions.map((item,i)=>`
+          <button class="${i===currentQuestionIndex?'current':''} ${selectedAnswers[item.question_id]!==undefined?'done':''}"
+            onclick="jumpQuestion(${i})">${i+1}</button>`).join('')}</div>
+        <div class="exam-footer">
+          <button class="btn outline" onclick="jumpQuestion(${currentQuestionIndex-1})" ${currentQuestionIndex===0?'disabled':''}>上一題</button>
+          ${currentQuestionIndex<activeQuestions.length-1
+            ?`<button class="btn primary" onclick="jumpQuestion(${currentQuestionIndex+1})">下一題</button>`
+            :`<button class="btn success" onclick="confirmSubmit()">完成並交卷</button>`}
+        </div>
+      </div>
+    </div>`;
+  renderMath();
+}
+async function changeAnswer(index,multiple) {
+  const q=activeQuestions[currentQuestionIndex];
+  let value;
+  if(multiple) {
+    const old=Array.isArray(selectedAnswers[q.question_id])?[...selectedAnswers[q.question_id]]:[];
+    value=old.includes(index)?old.filter(x=>x!==index):[...old,index];
+    value.sort((a,b)=>a-b);
+  } else value=index;
+  selectedAnswers[q.question_id]=value;
+  try {
+    saving=true;
+    await queryOrThrow(db.rpc('save_exam_answer',{
+      p_attempt_id:activeAttempt,
+      p_question_id:q.question_id,
+      p_selected_answer: value
+    }));
+  } catch(err) { toast('答案儲存失敗：'+err.message); }
+  finally { saving=false; }
+  renderExam();
+}
+function jumpQuestion(index) {
+  if(index<0||index>=activeQuestions.length) return;
+  currentQuestionIndex=index;renderExam();
+}
+function confirmSubmit() {
+  const unanswered=activeQuestions.filter(q=>selectedAnswers[q.question_id]===undefined).length;
+  if(!confirm(`確定要交卷嗎？${unanswered?`還有 ${unanswered} 題未作答。`:''}`)) return;
+  submitExam(false);
+}
+async function submitExam(auto) {
+  if(saving) {
+    toast('答案儲存中，請稍候再交卷');
+    return;
+  }
+  try {
+    if(examTimer) clearInterval(examTimer);
+    const result=await queryOrThrow(db.rpc('submit_exam',{p_attempt_id:activeAttempt}));
+    document.getElementById('mainContent').innerHTML=`
+      <div class="exam-layout">
+        <div class="card" style="text-align:center;padding:42px 20px">
+          <div class="logo" style="margin:0 auto 18px">✓</div>
+          <h2>測驗已${auto?'自動':'成功'}提交</h2>
+          <div class="muted">你的作答已完成並由系統計分</div>
+          <div class="stat" style="font-size:42px;margin-top:25px">${result[0].score} / ${result[0].total_points}</div>
+          <div class="muted">本次測驗成績</div>
+          <button class="btn primary" style="margin-top:25px" onclick="goPage('history')">查看測驗紀錄</button>
+        </div>
+      </div>`;
+    activeAttempt=null;
+  } catch(err) {
+    toast('交卷失敗：'+err.message);
+    if(activeAttempt) startTimer();
+  }
+}
+
+/* HISTORY & SCORES */
+async function studentHistory() {
+  const attempts=await queryOrThrow(
+    db.from('attempts')
+      .select('id,exam_id,started_at,submitted_at,score,total_points,status')
+      .eq('student_id',currentUser.id)
+      .order('started_at',{ascending:false})
+  );
+  const examIds=[...new Set(attempts.map(a=>a.exam_id))];
+  const exams=examIds.length?await queryOrThrow(db.from('exams').select('id,title,subject').in('id',examIds)):[];
+  document.getElementById('mainContent').innerHTML=`
+    <div class="page-head"><div><h2>測驗紀錄</h2><div class="muted">查看過去的作答紀錄與成績</div></div></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>考卷</th><th>開始時間</th><th>提交時間</th><th>成績</th><th>狀態</th></tr></thead>
+      <tbody>${attempts.map(a=>{
+        const ex=exams.find(e=>e.id===a.exam_id);
+        return `<tr><td>${escapeHtml(ex?.title||'考卷')}</td>
+          <td>${formatDate(a.started_at)}</td><td>${formatDate(a.submitted_at)}</td>
+          <td>${a.score??'—'} / ${a.total_points??'—'}</td>
+          <td><span class="badge">${a.status==='submitted'?'已提交':a.status==='in_progress'?'作答中':'已逾時'}</span></td></tr>`;
+      }).join('')||'<tr><td colspan="5" class="empty">尚無測驗紀錄</td></tr>'}</tbody>
+    </table></div></div>`;
+}
+async function teacherScores() {
+  const attempts=await queryOrThrow(db.from('attempts').select('*').order('started_at',{ascending:false}));
+  const [profiles,exams]=await Promise.all([
+    db.from('profiles').select('id,username,display_name'),
+    db.from('exams').select('id,title')
+  ]);
+  if(profiles.error) throw profiles.error;
+  if(exams.error) throw exams.error;
+  document.getElementById('mainContent').innerHTML=`
+    <div class="page-head"><div><h2>成績查詢</h2><div class="muted">查看所有學生的測驗成績</div></div></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>學生</th><th>考卷</th><th>開始時間</th><th>成績</th><th>狀態</th><th>操作</th></tr></thead>
+      <tbody>${attempts.map(a=>{
+        const p=profiles.data.find(x=>x.id===a.student_id);
+        const ex=exams.data.find(x=>x.id===a.exam_id);
+        return `<tr><td>${escapeHtml(p?.display_name||p?.username||'')}</td>
+          <td>${escapeHtml(ex?.title||'')}</td><td>${formatDate(a.started_at)}</td>
+          <td>${a.score??'—'} / ${a.total_points??'—'}</td>
+          <td>${a.status}</td>
+          <td><button class="btn danger small" onclick="deleteAttempt('${a.id}')">刪除紀錄</button></td></tr>`;
+      }).join('')||'<tr><td colspan="6" class="empty">尚無成績</td></tr>'}</tbody>
+    </table></div></div>`;
+}
+async function deleteAttempt(id) {
+  if(!confirm('確定刪除此學生的這次作答紀錄？刪除後學生可以重新作答。')) return;
+  try {
+    await queryOrThrow(db.from('attempts').delete().eq('id',id));
+    toast('作答紀錄已刪除');await teacherScores();
+  } catch(err) { toast('刪除失敗：'+err.message); }
+}
+
+/* RESTORE SESSION */
+(async function restoreSession() {
+  try {
+    const {data}=await db.auth.getSession();
+    if(data.session) {
+      currentUser=data.session.user;
+      await loadProfile();
+      await renderApp();
+    }
+  } catch(err) {
+    console.error(err);
+  }
+})();
+</script>
 </body>
 </html>
