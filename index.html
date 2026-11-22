@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test System</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans TC", sans-serif;
+      background: #f4f6fa;
+      color: #26364a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #e7efff;
+      color: #315eae;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: 800;
+      margin: 0 auto 14px;
+    }
+
+    h1 {
+      font-size: 27px;
+      margin: 0 0 8px;
+    }
+
+    .subtitle {
+      color: #8290a3;
+      font-size: 14px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e8edf4;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 12px 35px rgba(35, 55, 90, .06);
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 0 0 7px;
+    }
+
+    .description {
+      color: #8995a6;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      margin: 17px 0 8px;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #dce3ed;
+      border-radius: 11px;
+      padding: 0 14px;
+      font-size: 15px;
+      outline: none;
+      background: #fbfcfe;
+    }
+
+    input:focus {
+      border-color: #7198dc;
+      box-shadow: 0 0 0 3px rgba(75, 125, 205, .1);
+    }
+
+    button {
+      width: 100%;
+      height: 49px;
+      border: 0;
+      border-radius: 11px;
+      margin-top: 24px;
+      background: #315eae;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .message {
+      display: none;
+      margin-top: 17px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.error {
+      display: block;
+      color: #a33b3b;
+      background: #fff0f0;
+    }
+
+    .message.success {
+      display: block;
+      color: #26734a;
+      background: #eaf8ef;
+    }
+
+    .footer {
+      text-align: center;
+      color: #a0aaba;
+      font-size: 12px;
+      margin-top: 22px;
+    }
+
+    .dashboard {
+      display: none;
+      text-align: center;
+    }
+
+    .dashboard p {
+      color: #718096;
+      line-height: 1.8;
+    }
+
+    .logout {
+      background: #edf2fa;
+      color: #315eae;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="brand">
+      <div class="logo">T</div>
+      <h1>Test System</h1>
+      <div class="subtitle">線上測驗與題庫管理平台</div>
+    </header>
+
+    <section class="card" id="loginCard">
+      <h2>歡迎回來</h2>
+      <div class="description">請使用管理員提供的帳號登入</div>
+
+      <form id="loginForm">
+        <label for="username">使用者帳號</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="請輸入帳號"
+          autocomplete="username"
+          required
+        >
+
+        <label for="password">登入密碼</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="請輸入密碼"
+          autocomplete="current-password"
+          required
+        >
+
+        <button id="loginButton" type="submit">登入系統</button>
+      </form>
+
+      <div id="message" class="message"></div>
+    </section>
+
+    <section class="card dashboard" id="dashboard">
+      <div class="logo">✓</div>
+      <h2>登入成功</h2>
+      <p id="welcomeText"></p>
+      <p id="roleText"></p>
+      <button class="logout" id="logoutButton">登出帳號</button>
+    </section>
+
+    <footer class="footer">
+      Test System · Secure Learning Platform
+    </footer>
+
+  </main>
+
+  <script>
+    // Supabase 連線設定
+    const SUPABASE_URL =
+      "https://engbrxllahnciuysupxh.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_v2ewwLeaeciS3crf7XEb0A__IfHErpP";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+    const loginCard = document.getElementById("loginCard");
+    const dashboard = document.getElementById("dashboard");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    function showDashboard(profile) {
+      loginCard.style.display = "none";
+      dashboard.style.display = "block";
+
+      document.getElementById("welcomeText").textContent =
+        "您好，" + (profile.display_name || profile.username);
+
+      document.getElementById("roleText").textContent =
+        "帳號權限：" +
+        (profile.role === "teacher" ? "教師" : "學生");
+    }
+
+    loginForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username")
+        .value.trim().toLowerCase();
+
+      const password = document.getElementById("password").value;
+
+      if (!username || !password) {
+        showMessage("請輸入帳號及密碼。", "error");
+        return;
+      }
+
+      loginButton.disabled = true;
+      loginButton.textContent = "登入中……";
+      message.className = "message";
+
+      try {
+        const email = username + "@test-system.example.com";
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+        if (error) throw error;
+
+        const { data: profile, error: profileError } =
+          await supabaseClient
+            .from("profiles")
+            .select("username, display_name, role")
+            .eq("id", data.user.id)
+            .single();
+
+        if (profileError) throw profileError;
+
+        showDashboard(profile);
+
+      } catch (error) {
+        console.error(error);
+        showMessage(
+          "登入失敗：" + (error.message || "請檢查帳號及密碼"),
+          "error"
+        );
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "登入系統";
+      }
+    });
+
+    document.getElementById("logoutButton")
+      .addEventListener("click", async function() {
+        await supabaseClient.auth.signOut();
+        dashboard.style.display = "none";
+        loginCard.style.display = "block";
+        loginForm.reset();
+        message.className = "message";
+      });
+  </script>
+</body>
+</html>
