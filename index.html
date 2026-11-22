@@ -10,8 +10,8 @@
 <script>
 window.MathJax = {
   tex: {
-    inlineMath: [['\\(', '\\)']],
-    displayMath: [['\\[', '\\]']],
+    inlineMath: [['\\(','\\)']],
+    displayMath: [['\\[','\\]']],
     processEscapes: true
   },
   options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
@@ -21,953 +21,913 @@ window.MathJax = {
 
 <style>
 :root {
-  --blue:#3979bd;
-  --blue-dark:#245b96;
+  --blue:#3978b9;
+  --blue-dark:#245987;
   --blue-light:#eaf3fc;
   --bg:#f4f7fb;
-  --card:#fff;
-  --text:#26384c;
-  --muted:#8291a3;
-  --line:#e5ebf2;
-  --gold:#c49b55;
-  --danger:#d65d65;
-  --green:#299b78;
-  --shadow:0 5px 22px rgba(42,73,109,.07);
+  --border:#e2e9f1;
+  --text:#26384b;
+  --muted:#7d8da0;
+  --white:#fff;
+  --gold:#c49b50;
+  --danger:#d9534f;
 }
 * { box-sizing:border-box; }
 body {
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:var(--bg);
   color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 button,input,select,textarea { font:inherit; }
-button { cursor:pointer; }
-.hidden { display:none!important; }
-#app { min-height:100vh; }
-.login-wrap {
-  min-height:100vh;
+button {
+  border:0;
+  border-radius:9px;
+  padding:10px 15px;
+  cursor:pointer;
+  background:var(--blue);
+  color:white;
+}
+button.secondary { background:#e9f0f7;color:var(--blue-dark); }
+button.danger { background:#fff0ef;color:var(--danger); }
+button:disabled { opacity:.5;cursor:not-allowed; }
+input,select,textarea {
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:11px;
+  background:white;
+  color:var(--text);
+  margin-top:6px;
+}
+textarea { min-height:90px;resize:vertical; }
+label { display:block;font-size:14px;font-weight:600;margin:12px 0; }
+small,.muted { color:var(--muted); }
+header {
+  background:white;
+  border-bottom:1px solid var(--border);
+  padding:15px 22px;
   display:flex;
   align-items:center;
-  justify-content:center;
-  padding:24px;
-  background:linear-gradient(145deg,#edf5ff,#f8fafc 60%,#f5f7fb);
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:5;
 }
-.login-card {
-  width:100%;
-  max-width:420px;
+.brand { font-weight:800;color:var(--blue-dark);font-size:20px; }
+main { max-width:1100px;margin:25px auto;padding:0 16px 60px; }
+.panel {
   background:white;
-  padding:38px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 3px 14px #26384b08;
 }
-.logo {
-  width:52px;height:52px;border-radius:16px;
-  background:var(--blue-light);
-  color:var(--blue);
-  display:grid;place-items:center;
-  font-size:24px;font-weight:800;
-  margin-bottom:22px;
+h1 { font-size:25px;margin:0 0 18px; }
+h2 { font-size:19px;margin:0 0 15px; }
+h3 { font-size:16px; }
+.tabs { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px; }
+.tabs button { background:#e9f0f7;color:var(--blue-dark); }
+.tabs button.active { background:var(--blue);color:white; }
+.grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px; }
+.actions { display:flex;gap:8px;flex-wrap:wrap;margin-top:12px; }
+.item {
+  border:1px solid var(--border);
+  padding:15px;
+  border-radius:12px;
+  margin:10px 0;
 }
-h1 { font-size:25px;margin:0 0 8px; }
-.subtitle { color:var(--muted);font-size:14px;margin-bottom:28px; }
-.field { margin:16px 0; }
-.field label {
-  display:block;font-size:13px;font-weight:650;
-  margin-bottom:8px;color:#53677e;
-}
-input,select,textarea {
-  width:100%;padding:12px 13px;
-  border:1px solid #dce4ed;border-radius:10px;
-  outline:none;background:#fff;color:var(--text);
-}
-input:focus,select:focus,textarea:focus {
-  border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(57,121,189,.1);
-}
-textarea { min-height:100px;resize:vertical; }
-.btn {
-  border:0;border-radius:10px;padding:11px 17px;
-  font-weight:650;transition:.18s;
-}
-.btn:hover { transform:translateY(-1px);filter:brightness(.98); }
-.primary { background:var(--blue);color:white; }
-.secondary { background:var(--blue-light);color:var(--blue-dark); }
-.outline { background:white;border:1px solid var(--line);color:var(--text); }
-.danger { background:#fff0f0;color:var(--danger); }
-.success { background:#eaf8f3;color:var(--green); }
-.full { width:100%; }
-.small { padding:7px 11px;font-size:13px; }
-.topbar {
-  height:68px;background:#fff;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 26px;position:sticky;top:0;z-index:10;
-}
-.brand { display:flex;align-items:center;gap:11px;font-weight:800; }
-.brand-mark {
-  background:var(--blue-light);color:var(--blue);
-  width:36px;height:36px;border-radius:11px;
-  display:grid;place-items:center;
-}
-.user-area { display:flex;align-items:center;gap:12px;font-size:13px; }
-.layout { display:flex;max-width:1400px;margin:auto;min-height:calc(100vh - 68px); }
-.sidebar {
-  width:225px;padding:24px 15px;border-right:1px solid var(--line);
-  background:#fff;flex-shrink:0;
-}
-.nav-label {
-  color:#9aa7b5;font-size:11px;font-weight:700;
-  padding:10px 12px;letter-spacing:1px;
-}
-.nav-btn {
-  width:100%;display:flex;align-items:center;gap:10px;
-  padding:12px;border:0;border-radius:10px;
-  background:transparent;text-align:left;color:#64768a;
-  margin:3px 0;font-weight:600;
-}
-.nav-btn.active,.nav-btn:hover { background:var(--blue-light);color:var(--blue-dark); }
-.main { flex:1;min-width:0;padding:30px; }
-.page-head {
-  display:flex;justify-content:space-between;align-items:center;
-  gap:14px;margin-bottom:24px;flex-wrap:wrap;
-}
-.page-head h2 { margin:0;font-size:23px; }
-.muted { color:var(--muted);font-size:13px; }
-.grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px; }
-.card {
-  background:var(--card);border:1px solid var(--line);
-  border-radius:15px;padding:20px;box-shadow:var(--shadow);
-  margin-bottom:16px;
-}
-.stat { font-size:28px;font-weight:800;margin:9px 0 2px; }
-.stat-label { font-size:13px;color:var(--muted); }
-.section-title { font-size:16px;font-weight:750;margin:0 0 16px; }
-.row { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
-.between { justify-content:space-between; }
-.table-wrap { overflow-x:auto; }
-table { border-collapse:collapse;width:100%;min-width:550px; }
-th,td { text-align:left;padding:13px 12px;border-bottom:1px solid var(--line);font-size:13px; }
-th { color:var(--muted);font-weight:700;background:#fafbfd; }
 .badge {
-  display:inline-block;padding:5px 9px;border-radius:20px;
-  background:var(--blue-light);color:var(--blue-dark);font-size:11px;
+  display:inline-block;
+  border-radius:20px;
+  background:var(--blue-light);
+  color:var(--blue-dark);
+  padding:4px 9px;
+  font-size:12px;
 }
-.badge.green { background:#e8f7f0;color:#238461; }
-.badge.gray { background:#f0f2f5;color:#758397; }
-.empty { text-align:center;color:var(--muted);padding:35px 10px;font-size:14px; }
-.form-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
-.question-box {
-  border:1px solid var(--line);border-radius:13px;
-  padding:17px;margin:12px 0;background:white;
+.hidden { display:none!important; }
+#login {
+  max-width:430px;
+  margin:9vh auto;
+  padding:28px;
 }
-.option-row { display:flex;gap:9px;align-items:center;margin:9px 0; }
-.option-row input[type=checkbox] { width:auto; }
-.option-row input[type=text] { flex:1; }
-.modal-bg {
-  position:fixed;inset:0;background:rgba(20,35,55,.42);
-  display:flex;align-items:center;justify-content:center;
-  padding:18px;z-index:30;
+#login .brand { font-size:27px;margin-bottom:8px; }
+#message {
+  position:fixed;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#26384b;
+  color:white;
+  border-radius:10px;
+  padding:12px 18px;
+  z-index:20;
+  display:none;
+  max-width:90%;
 }
-.modal {
-  width:100%;max-width:720px;max-height:90vh;overflow:auto;
-  background:white;border-radius:18px;padding:24px;
-  box-shadow:0 20px 70px rgba(0,0,0,.18);
+.question {
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:17px;
+  margin:14px 0;
 }
-.modal-head { display:flex;justify-content:space-between;align-items:center;margin-bottom:18px; }
-.modal-head h3 { margin:0; }
-.exam-layout { max-width:1000px;margin:auto; }
-.exam-top {
-  background:white;border:1px solid var(--line);border-radius:14px;
-  padding:16px 20px;display:flex;justify-content:space-between;
-  align-items:center;gap:12px;margin-bottom:16px;
+.option {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px;
+  background:#f7f9fc;
+  border-radius:9px;
+  margin:7px 0;
+  font-weight:400;
 }
-.timer { font-weight:800;color:var(--blue-dark);font-size:20px;font-variant-numeric:tabular-nums; }
-.exam-question { min-height:260px; }
-.question-content { font-size:17px;line-height:1.85;white-space:pre-wrap; }
-.answer-option {
-  display:flex;gap:12px;align-items:flex-start;
-  padding:13px;border:1px solid var(--line);
-  border-radius:10px;margin:10px 0;cursor:pointer;
+.option input { width:auto;margin:3px 0 0; }
+.timer {
+  position:sticky;
+  top:65px;
+  z-index:3;
+  background:#fff8e9;
+  color:#906b25;
+  padding:12px;
+  border-radius:10px;
+  font-weight:800;
+  text-align:center;
 }
-.answer-option:hover { background:#f7faff;border-color:#b8d2ec; }
-.answer-option input { width:auto;margin-top:4px; }
-.exam-footer { display:flex;justify-content:space-between;gap:10px;margin-top:20px; }
-.qnav { display:flex;gap:7px;flex-wrap:wrap;margin-top:15px; }
-.qnav button {
-  width:36px;height:36px;border-radius:9px;
-  border:1px solid var(--line);background:white;color:#65758a;
-}
-.qnav button.done { background:#e8f5ef;color:#24845f;border-color:#c5e8d9; }
-.qnav button.current { border:2px solid var(--blue);color:var(--blue); }
-.toast {
-  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
-  background:#26384c;color:white;padding:12px 18px;border-radius:10px;
-  z-index:99;font-size:13px;box-shadow:var(--shadow);
-  max-width:90%;text-align:center;
-}
-@media(max-width:850px) {
-  .sidebar { width:185px; }
-  .main { padding:20px; }
-  .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-}
-@media(max-width:620px) {
-  .topbar { padding:0 14px;height:60px; }
-  .layout { display:block; }
-  .sidebar {
-    width:100%;display:flex;overflow-x:auto;padding:8px;
-    border-right:0;border-bottom:1px solid var(--line);
-  }
-  .nav-label { display:none; }
-  .nav-btn { width:auto;white-space:nowrap;padding:10px 12px; }
-  .main { padding:16px; }
-  .grid { grid-template-columns:1fr 1fr;gap:10px; }
-  .card { padding:15px; }
-  .login-card { padding:27px 22px; }
-  .form-grid { grid-template-columns:1fr; }
-  .user-area span { display:none; }
+table { width:100%;border-collapse:collapse; }
+th,td { padding:10px;border-bottom:1px solid var(--border);text-align:left;font-size:14px; }
+@media(max-width:650px) {
+  .grid { grid-template-columns:1fr; }
+  header { padding:12px; }
+  main { margin:16px auto; }
+  .panel { padding:15px; }
+  table { display:block;overflow-x:auto; }
 }
 </style>
 </head>
 
 <body>
-<div id="app">
-  <div class="login-wrap">
-    <div class="login-card">
-      <div class="logo">T</div>
-      <h1>Test System</h1>
-      <div class="subtitle">線上測驗與題庫管理平台</div>
-      <form id="loginForm">
-        <div class="field">
-          <label>帳號</label>
-          <input id="username" autocomplete="username" required placeholder="請輸入帳號">
-        </div>
-        <div class="field">
-          <label>密碼</label>
-          <input id="password" type="password" autocomplete="current-password" required placeholder="請輸入密碼">
-        </div>
-        <button class="btn primary full" id="loginBtn">登入系統</button>
-      </form>
-      <p class="muted" style="margin-top:18px;text-align:center">請使用管理員提供的帳號登入</p>
-    </div>
-  </div>
-</div>
 
-<div id="modalRoot"></div>
-<div id="toastRoot"></div>
+<header>
+  <div class="brand">Test System</div>
+  <div id="userBar" class="hidden">
+    <span id="userName"></span>
+    <button class="secondary" onclick="logout()">登出</button>
+  </div>
+</header>
+
+<section id="login" class="panel">
+  <div class="brand">Test System</div>
+  <p class="muted">線上測驗與題庫管理平台</p>
+
+  <label>帳號
+    <input id="loginUsername" autocomplete="username" placeholder="請輸入帳號">
+  </label>
+  <label>密碼
+    <input id="loginPassword" type="password" autocomplete="current-password" placeholder="請輸入密碼">
+  </label>
+  <button style="width:100%" onclick="login()">登入</button>
+</section>
+
+<main id="app" class="hidden">
+  <div id="teacherArea" class="hidden">
+    <h1>教師管理中心</h1>
+    <div class="tabs">
+      <button class="active" onclick="teacherTab('home',this)">總覽</button>
+      <button onclick="teacherTab('questions',this)">題庫管理</button>
+      <button onclick="teacherTab('exams',this)">測驗管理</button>
+      <button onclick="teacherTab('results',this)">成績統計</button>
+    </div>
+
+    <section id="t-home" class="panel">
+      <h2>教師總覽</h2>
+      <p>歡迎使用 Test System。</p>
+      <div class="grid">
+        <div class="item"><h3>題庫</h3><p id="questionCount">載入中</p></div>
+        <div class="item"><h3>測驗</h3><p id="examCount">載入中</p></div>
+      </div>
+    </section>
+
+    <section id="t-questions" class="hidden">
+      <div class="panel">
+        <h2>新增題目</h2>
+        <label>科目
+          <select id="qSubject">
+            <option>國文</option><option>英文</option>
+            <option>數學</option><option>自然</option>
+            <option>地理</option><option>歷史</option><option>公民</option>
+          </select>
+        </label>
+        <label>單元
+          <input id="qUnit" placeholder="例如：3-1 推理與證明">
+        </label>
+        <label>題型
+          <select id="qType">
+            <option value="single">單選題</option>
+            <option value="multiple">多選題</option>
+          </select>
+        </label>
+        <label>題目內容（支援 LaTeX）
+          <textarea id="qContent" placeholder="輸入題目，可使用 \(公式\) 或 \[公式\]"></textarea>
+        </label>
+        <div id="optionsEditor"></div>
+        <div class="actions">
+          <button class="secondary" onclick="addOption()">新增選項</button>
+        </div>
+        <label>正確答案（填選項編號，例如 1；多選填 1,3）
+          <input id="qAnswer" placeholder="例如：2">
+        </label>
+        <label>解析
+          <textarea id="qExplanation"></textarea>
+        </label>
+        <label>題目圖片
+          <input type="file" id="qImage" accept="image/png,image/jpeg,image/webp,image/gif">
+        </label>
+        <button onclick="saveQuestion()">儲存題目</button>
+      </div>
+
+      <div class="panel">
+        <h2>題庫列表</h2>
+        <div class="grid">
+          <label>科目
+            <select id="filterSubject" onchange="loadQuestions()">
+              <option value="">全部</option>
+              <option>國文</option><option>英文</option>
+              <option>數學</option><option>自然</option>
+              <option>地理</option><option>歷史</option><option>公民</option>
+            </select>
+          </label>
+          <label>單元
+            <input id="filterUnit" placeholder="輸入單元關鍵字" oninput="filterQuestionList()">
+          </label>
+        </div>
+        <div id="questionList"></div>
+      </div>
+    </section>
+
+    <section id="t-exams" class="hidden">
+      <div class="panel">
+        <h2>建立測驗</h2>
+        <label>測驗名稱
+          <input id="examTitle" placeholder="例如：3-1 推理與證明（進階）">
+        </label>
+        <label>科目
+          <select id="examSubject">
+            <option>國文</option><option>英文</option>
+            <option>數學</option><option>自然</option>
+            <option>地理</option><option>歷史</option><option>公民</option>
+          </select>
+        </label>
+        <label>測驗單元（可輸入多個，以逗號分隔）
+          <input id="examUnits" placeholder="3-1 推理與證明, 3-2 統計">
+        </label>
+        <label>作答時間（分鐘）
+          <input id="examDuration" type="number" min="1" value="30">
+        </label>
+        <div class="grid">
+          <label>開始時間
+            <input id="examStart" type="datetime-local">
+          </label>
+          <label>截止時間
+            <input id="examEnd" type="datetime-local">
+          </label>
+        </div>
+        <label>選擇題目
+          <div id="examQuestionPicker"></div>
+        </label>
+        <button onclick="createExam()">建立測驗</button>
+      </div>
+
+      <div class="panel">
+        <h2>測驗列表</h2>
+        <div id="examList"></div>
+      </div>
+    </section>
+
+    <section id="t-results" class="hidden">
+      <div class="panel">
+        <h2>成績統計</h2>
+        <label>選擇測驗
+          <select id="resultExam" onchange="loadResults()"></select>
+        </label>
+        <div id="resultsTable"></div>
+        <h3>題目答對率</h3>
+        <div id="questionStats"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="studentArea" class="hidden">
+    <h1>學生測驗中心</h1>
+    <div class="tabs">
+      <button class="active" onclick="studentTab('available',this)">可作答測驗</button>
+      <button onclick="studentTab('history',this)">測驗紀錄</button>
+    </div>
+    <section id="s-available" class="panel">
+      <h2>我的測驗</h2>
+      <div id="assignedExams"></div>
+    </section>
+    <section id="s-history" class="panel hidden">
+      <h2>測驗紀錄</h2>
+      <div id="studentHistory"></div>
+    </section>
+    <section id="takingExam" class="panel hidden">
+      <div class="timer" id="timer">剩餘時間：--:--</div>
+      <h2 id="takingTitle"></h2>
+      <div id="takingQuestions"></div>
+      <button onclick="submitCurrentExam()">交卷</button>
+    </section>
+    <section id="reviewArea" class="panel hidden">
+      <h2>測驗檢討</h2>
+      <div id="reviewContent"></div>
+    </section>
+  </div>
+</main>
+
+<div id="message"></div>
 
 <script>
-/* =========================================
-   Supabase 設定
-   將 YOUR_PUBLISHABLE_KEY 換成舊版的 Publishable Key
-========================================= */
-const SUPABASE_URL = 'https://engbrxllahnciuysupxh.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_v2ewwLeaeciS3crf7XEb0A__IfHErpP';
+const SUPABASE_URL = "https://engbrxllahnciuysupxh.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_PUBLISHABLE_KEY";
 
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let currentProfile = null;
-let currentPage = 'home';
-let questionsCache = [];
-let classesCache = [];
-let examQuestionsSelected = [];
+let questions = [];
+let exams = [];
 let activeAttempt = null;
 let activeExam = null;
 let activeQuestions = [];
-let currentQuestionIndex = 0;
-let selectedAnswers = {};
-let examTimer = null;
-let remainingSeconds = 0;
-let saving = false;
+let savedAnswers = {};
+let deadlineAt = null;
+let timerHandle = null;
+let optionCount = 4;
 
-const app = document.getElementById('app');
-
-function toast(message) {
-  const root = document.getElementById('toastRoot');
-  root.innerHTML = `<div class="toast">${escapeHtml(message)}</div>`;
-  setTimeout(() => root.innerHTML = '', 2800);
+function notify(message) {
+  const el = document.getElementById('message');
+  el.textContent = message;
+  el.style.display = 'block';
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => el.style.display = 'none', 3500);
 }
+
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   })[c]);
 }
-function safeJson(value) {
-  return JSON.stringify(value ?? null);
-}
-function renderMath() {
-  if (window.MathJax?.typesetPromise) {
-    window.MathJax.typesetPromise().catch(console.error);
-  }
-}
-function formatDate(value) {
-  if (!value) return '未設定';
-  return new Date(value).toLocaleString('zh-TW', {hour12:false});
-}
-function showModal(content) {
-  document.getElementById('modalRoot').innerHTML =
-    `<div class="modal-bg" id="modalBg"><div class="modal">${content}</div></div>`;
-  document.getElementById('modalBg').addEventListener('click', e => {
-    if (e.target.id === 'modalBg') closeModal();
-  });
-  renderMath();
-}
-function closeModal() {
-  document.getElementById('modalRoot').innerHTML = '';
-}
-async function queryOrThrow(promise) {
-  const {data,error} = await promise;
-  if (error) throw error;
-  return data;
+
+function localDateValue(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
-/* LOGIN */
-document.getElementById('loginForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  if (SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY') {
-    toast('請先填入 Supabase Publishable Key');
-    return;
-  }
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true;
-  btn.textContent = '登入中…';
-  try {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const {data,error} = await db.auth.signInWithPassword({
-      email: username + '@test-system.example.com',
-      password
-    });
-    if (error) throw error;
-    currentUser = data.user;
-    await loadProfile();
-    await renderApp();
-  } catch(err) {
-    toast('登入失敗：' + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '登入系統';
-  }
-});
+async function login() {
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!username || !password) return notify('請輸入帳號與密碼');
 
-async function loadProfile() {
-  currentProfile = await queryOrThrow(
-    db.from('profiles')
-      .select('id,username,display_name,role')
-      .eq('id',currentUser.id)
-      .single()
-  );
+  const email = username.includes('@') ? username : username + '@test-system.example.com';
+  const { data, error } = await db.auth.signInWithPassword({ email, password });
+  if (error) return notify(error.message);
+  await initialize(data.user);
 }
+
+async function initialize(user) {
+  currentUser = user;
+  const { data, error } = await db.from('profiles')
+    .select('id,username,display_name,role')
+    .eq('id', user.id)
+    .single();
+
+  if (error || !data) {
+    await db.auth.signOut();
+    return notify('找不到使用者資料，請聯絡教師');
+  }
+
+  currentProfile = data;
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('userBar').classList.remove('hidden');
+  document.getElementById('userName').textContent =
+    data.display_name || data.username || '使用者';
+
+  if (data.role === 'teacher') {
+    document.getElementById('teacherArea').classList.remove('hidden');
+    await loadTeacherHome();
+  } else if (data.role === 'student') {
+    document.getElementById('studentArea').classList.remove('hidden');
+    await loadAssignedExams();
+    await loadStudentHistory();
+  } else {
+    notify('帳號角色設定不正確');
+  }
+}
+
 async function logout() {
-  if (examTimer) clearInterval(examTimer);
+  clearInterval(timerHandle);
   await db.auth.signOut();
-  currentUser = null;
-  currentProfile = null;
   location.reload();
 }
 
-/* APP SHELL */
-async function renderApp() {
-  const isTeacher = currentProfile.role === 'teacher';
-  app.innerHTML = `
-    <header class="topbar">
-      <div class="brand"><div class="brand-mark">T</div>Test System</div>
-      <div class="user-area">
-        <span>${escapeHtml(currentProfile.display_name || currentProfile.username)} · ${isTeacher?'教師':'學生'}</span>
-        <button class="btn outline small" onclick="logout()">登出</button>
-      </div>
-    </header>
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="nav-label">MENU</div>
-        <button class="nav-btn active" data-page="home" onclick="goPage('home')">⌂　總覽</button>
-        ${isTeacher ? `
-          <button class="nav-btn" data-page="questions" onclick="goPage('questions')">▤　題庫管理</button>
-          <button class="nav-btn" data-page="exams" onclick="goPage('exams')">▣　考卷管理</button>
-          <button class="nav-btn" data-page="classes" onclick="goPage('classes')">▥　班級管理</button>
-          <button class="nav-btn" data-page="scores" onclick="goPage('scores')">▧　成績查詢</button>
-        ` : `
-          <button class="nav-btn" data-page="myexams" onclick="goPage('myexams')">▣　我的測驗</button>
-          <button class="nav-btn" data-page="history" onclick="goPage('history')">◷　測驗紀錄</button>
-        `}
-      </aside>
-      <main class="main" id="mainContent"></main>
-    </div>`;
-  await goPage('home');
+async function restoreSession() {
+  const { data } = await db.auth.getSession();
+  if (data.session?.user) await initialize(data.session.user);
 }
-async function goPage(page) {
-  currentPage = page;
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    b.classList.toggle('active',b.dataset.page === page);
-  });
-  const main = document.getElementById('mainContent');
-  main.innerHTML = '<div class="card empty">資料載入中…</div>';
-  try {
-    if (currentProfile.role === 'teacher') {
-      if (page === 'home') await teacherHome();
-      if (page === 'questions') await teacherQuestions();
-      if (page === 'exams') await teacherExams();
-      if (page === 'classes') await teacherClasses();
-      if (page === 'scores') await teacherScores();
-    } else {
-      if (page === 'home') await studentHome();
-      if (page === 'myexams') await studentExams();
-      if (page === 'history') await studentHistory();
-    }
-  } catch(err) {
-    main.innerHTML = `<div class="card">載入失敗：${escapeHtml(err.message)}</div>`;
+
+function teacherTab(name, button) {
+  ['home','questions','exams','results'].forEach(x =>
+    document.getElementById('t-' + x).classList.toggle('hidden', x !== name)
+  );
+  document.querySelectorAll('#teacherArea .tabs button').forEach(b => b.classList.remove('active'));
+  button.classList.add('active');
+
+  if (name === 'questions') loadQuestions();
+  if (name === 'exams') loadExams();
+  if (name === 'results') loadExamOptions();
+}
+
+function studentTab(name, button) {
+  ['available','history'].forEach(x =>
+    document.getElementById('s-' + x).classList.toggle('hidden', x !== name)
+  );
+  document.getElementById('takingExam').classList.add('hidden');
+  document.getElementById('reviewArea').classList.add('hidden');
+  document.querySelectorAll('#studentArea .tabs button').forEach(b => b.classList.remove('active'));
+  button.classList.add('active');
+  if (name === 'available') loadAssignedExams();
+  else loadStudentHistory();
+}
+
+async function loadTeacherHome() {
+  const q = await db.from('questions').select('id', {count:'exact',head:true});
+  const e = await db.from('exams').select('id', {count:'exact',head:true});
+  document.getElementById('questionCount').textContent = q.count ?? '—';
+  document.getElementById('examCount').textContent = e.count ?? '—';
+}
+
+function renderOptionEditor() {
+  const el = document.getElementById('optionsEditor');
+  el.innerHTML = '';
+  for (let i=0;i<optionCount;i++) {
+    el.innerHTML += `
+      <label>選項 ${i+1}
+        <input class="q-option" placeholder="輸入選項內容">
+      </label>`;
   }
 }
 
-/* TEACHER HOME */
-async function teacherHome() {
-  const [qs,es,cs,ps] = await Promise.all([
-    db.from('questions').select('id',{count:'exact',head:true}),
-    db.from('exams').select('id',{count:'exact',head:true}),
-    db.from('classes').select('id',{count:'exact',head:true}),
-    db.from('profiles').select('id',{count:'exact',head:true}).eq('role','student')
-  ]);
-  document.getElementById('mainContent').innerHTML = `
-    <div class="page-head"><div><h2>教師總覽</h2><div class="muted">歡迎回到 Test System</div></div></div>
-    <div class="grid">
-      <div class="card"><div class="stat-label">題庫題目</div><div class="stat">${qs.count ?? 0}</div></div>
-      <div class="card"><div class="stat-label">考卷數量</div><div class="stat">${es.count ?? 0}</div></div>
-      <div class="card"><div class="stat-label">班級數量</div><div class="stat">${cs.count ?? 0}</div></div>
-      <div class="card"><div class="stat-label">學生帳號</div><div class="stat">${ps.count ?? 0}</div></div>
-    </div>
-    <div class="card"><h3 class="section-title">快速操作</h3>
-      <div class="row">
-        <button class="btn primary" onclick="goPage('questions')">新增題目</button>
-        <button class="btn secondary" onclick="goPage('exams')">建立考卷</button>
-        <button class="btn outline" onclick="goPage('classes')">管理班級</button>
-      </div>
-    </div>`;
+function addOption() {
+  if (optionCount >= 10) return notify('最多 10 個選項');
+  optionCount++;
+  renderOptionEditor();
 }
 
-/* QUESTION BANK */
-async function teacherQuestions() {
-  questionsCache = await queryOrThrow(
-    db.from('questions')
-      .select('*')
-      .order('created_at',{ascending:false})
-  );
-  document.getElementById('mainContent').innerHTML = `
-    <div class="page-head">
-      <div><h2>題庫管理</h2><div class="muted">新增、編輯及管理測驗題目</div></div>
-      <button class="btn primary" onclick="questionEditor()">＋ 新增題目</button>
+async function saveQuestion() {
+  const content = document.getElementById('qContent').value.trim();
+  const options = [...document.querySelectorAll('.q-option')].map(x=>x.value.trim());
+  if (!content || options.some(x=>!x)) return notify('請完整填寫題目及選項');
+
+  const rawAnswer = document.getElementById('qAnswer').value.trim();
+  const indexes = rawAnswer.split(',').map(x=>Number(x.trim())-1);
+  if (!rawAnswer || indexes.some(x=>!Number.isInteger(x)||x<0||x>=options.length))
+    return notify('正確答案格式不正確');
+
+  const type = document.getElementById('qType').value;
+  if (type === 'single' && indexes.length !== 1) return notify('單選題只能有一個答案');
+
+  let imageUrl = null;
+  const file = document.getElementById('qImage').files[0];
+  if (file) {
+    if (file.size > 10 * 1024 * 1024) return notify('圖片不可超過 10MB');
+    const ext = file.name.split('.').pop().toLowerCase();
+    const path = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+    const { error: uploadError } = await db.storage
+      .from('test-question-images')
+      .upload(path,file,{upsert:false,contentType:file.type});
+    if (uploadError) return notify('圖片上傳失敗：' + uploadError.message);
+    imageUrl = db.storage.from('test-question-images').getPublicUrl(path).data.publicUrl;
+  }
+
+  const payload = {
+    subject:document.getElementById('qSubject').value,
+    unit:document.getElementById('qUnit').value.trim() || null,
+    question_type:type,
+    content,
+    options,
+    correct_answer:type === 'single' ? indexes[0] : indexes,
+    explanation:document.getElementById('qExplanation').value,
+    image_url:imageUrl,
+    created_by:currentUser.id
+  };
+
+  const { error } = await db.from('questions').insert(payload);
+  if (error) return notify('儲存失敗：' + error.message);
+
+  notify('題目已儲存');
+  document.getElementById('qContent').value = '';
+  document.getElementById('qAnswer').value = '';
+  document.getElementById('qExplanation').value = '';
+  document.getElementById('qImage').value = '';
+  await loadQuestions();
+}
+
+async function loadQuestions() {
+  const subject = document.getElementById('filterSubject').value;
+  let query = db.from('questions')
+    .select('id,subject,unit,question_type,content,options,correct_answer,explanation,image_url')
+    .order('created_at',{ascending:false});
+  if (subject) query = query.eq('subject',subject);
+  const {data,error} = await query;
+  if (error) return notify(error.message);
+  questions = data || [];
+  renderQuestions();
+  renderExamQuestionPicker();
+}
+
+function renderQuestions() {
+  const keyword = document.getElementById('filterUnit').value.trim().toLowerCase();
+  const filtered = questions.filter(q => !keyword || (q.unit||'').toLowerCase().includes(keyword));
+  document.getElementById('questionList').innerHTML = filtered.map(q=>`
+    <div class="item">
+      <span class="badge">${escapeHtml(q.subject)}</span>
+      <span class="badge">${escapeHtml(q.unit||'未分類')}</span>
+      <p>${escapeHtml(q.content)}</p>
+      <small>${q.question_type === 'multiple' ? '多選題':'單選題'} · ${q.options.length} 個選項</small>
+      <div class="actions">
+        <button class="danger" onclick="deleteQuestion('${q.id}')">刪除</button>
+      </div>
     </div>
-    <div class="card">
-      <div class="row between">
-        <h3 class="section-title">所有題目（${questionsCache.length}）</h3>
-        <input style="max-width:230px" id="questionSearch" placeholder="搜尋題目…" oninput="filterQuestions()">
-      </div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>科目</th><th>題型</th><th>題目</th><th>操作</th></tr></thead>
-        <tbody id="questionRows">${questionRows(questionsCache)}</tbody>
-      </table></div>
-    </div>`;
+  `).join('') || '<p class="muted">目前沒有題目</p>';
+  if (window.MathJax) MathJax.typesetPromise();
 }
-function questionRows(items) {
-  if (!items.length) return '<tr><td colspan="4" class="empty">目前沒有題目</td></tr>';
-  return items.map(q => `
-    <tr>
-      <td>${escapeHtml(q.subject)}</td>
-      <td><span class="badge">${q.question_type==='multiple'?'多選題':'單選題'}</span></td>
-      <td>${escapeHtml(q.content.slice(0,75))}</td>
-      <td><div class="row">
-        <button class="btn secondary small" onclick="questionEditor('${q.id}')">編輯</button>
-        <button class="btn danger small" onclick="deleteQuestion('${q.id}')">刪除</button>
-      </div></td>
-    </tr>`).join('');
-}
-function filterQuestions() {
-  const word = document.getElementById('questionSearch').value.toLowerCase();
-  document.getElementById('questionRows').innerHTML =
-    questionRows(questionsCache.filter(q =>
-      (q.content+' '+q.subject).toLowerCase().includes(word)
-    ));
-}
-function questionEditor(id=null) {
-  const q = questionsCache.find(x => x.id===id);
-  const opts = q?.options || ['','','',''];
-  const correct = q?.correct_answer;
-  showModal(`
-    <div class="modal-head"><h3>${q?'編輯題目':'新增題目'}</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
-    <form id="questionForm">
-      <div class="form-grid">
-        <div class="field"><label>科目</label><input id="qSubject" required value="${escapeHtml(q?.subject||'')}"></div>
-        <div class="field"><label>題型</label>
-          <select id="qType">
-            <option value="single" ${q?.question_type!=='multiple'?'selected':''}>單選題</option>
-            <option value="multiple" ${q?.question_type==='multiple'?'selected':''}>多選題</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>題目內容（支援 LaTeX，例如 \\(x^2\\)）</label>
-        <textarea id="qContent" required>${escapeHtml(q?.content||'')}</textarea>
-      </div>
-      <div class="field"><label>選項（請填寫至少兩個）</label>
-        ${[0,1,2,3].map(i=>`
-          <div class="option-row">
-            <span>${String.fromCharCode(65+i)}.</span>
-            <input id="opt${i}" value="${escapeHtml(opts[i]||'')}" placeholder="選項內容">
-            <input type="${q?.question_type==='multiple'?'checkbox':'radio'}" name="correctOption" value="${i}" ${isCorrect(correct,i)?'checked':''} title="正確答案">
-          </div>`).join('')}
-        <div class="muted">勾選／選取正確答案。多選題可以選多個。</div>
-      </div>
-      <div class="field"><label>解析（選填）</label><textarea id="qExplanation">${escapeHtml(q?.explanation||'')}</textarea></div>
-      <div class="field"><label>圖片網址（選填）</label><input id="qImage" value="${escapeHtml(q?.image_url||'')}" placeholder="https://…"></div>
-      <button class="btn primary full">${q?'儲存修改':'新增題目'}</button>
-    </form>`);
-  document.getElementById('qType').addEventListener('change',e=>{
-    const type=e.target.value;
-    document.querySelectorAll('input[name="correctOption"]').forEach(el=>{
-      el.type=type==='multiple'?'checkbox':'radio';
-      el.checked=false;
-    });
-  });
-  document.getElementById('questionForm').addEventListener('submit',e=>saveQuestion(e,id));
-}
-function isCorrect(answer,index) {
-  if (Array.isArray(answer)) return answer.includes(index);
-  return answer===index;
-}
-async function saveQuestion(e,id) {
-  e.preventDefault();
-  try {
-    const type=document.getElementById('qType').value;
-    const options=[0,1,2,3].map(i=>document.getElementById('opt'+i).value.trim()).filter(Boolean);
-    if(options.length<2) throw new Error('至少需要兩個選項');
-    const checked=[...document.querySelectorAll('input[name="correctOption"]:checked')].map(x=>Number(x.value));
-    if(!checked.length) throw new Error('請選擇正確答案');
-    if(type==='single' && checked.length!==1) throw new Error('單選題只能選一個正確答案');
-    const payload={
-      subject:document.getElementById('qSubject').value.trim(),
-      question_type:type,
-      content:document.getElementById('qContent').value.trim(),
-      options,
-      correct_answer:type==='multiple'?checked:checked[0],
-      explanation:document.getElementById('qExplanation').value.trim(),
-      image_url:document.getElementById('qImage').value.trim()||null,
-      created_by:currentUser.id
-    };
-    if(id) await queryOrThrow(db.from('questions').update(payload).eq('id',id));
-    else await queryOrThrow(db.from('questions').insert(payload));
-    closeModal();toast('題目已儲存');await teacherQuestions();
-  } catch(err) { toast('儲存失敗：'+err.message); }
-}
+
+function filterQuestionList() { renderQuestions(); }
+
 async function deleteQuestion(id) {
-  if(!confirm('確定刪除這道題目？若已加入考卷，可能因外鍵關聯而無法刪除。')) return;
-  try {
-    await queryOrThrow(db.from('questions').delete().eq('id',id));
-    toast('已刪除');await teacherQuestions();
-  } catch(err) { toast('刪除失敗：'+err.message); }
+  if (!confirm('確定刪除此題？若已被測驗使用，資料庫可能會拒絕刪除。')) return;
+  const {error} = await db.from('questions').delete().eq('id',id);
+  if (error) return notify(error.message);
+  notify('已刪除');
+  await loadQuestions();
 }
 
-/* CLASSES */
-async function teacherClasses() {
-  classesCache=await queryOrThrow(db.from('classes').select('*').order('created_at',{ascending:false}));
-  const members=await queryOrThrow(db.from('class_members').select('class_id,student_id'));
-  document.getElementById('mainContent').innerHTML=`
-    <div class="page-head"><div><h2>班級管理</h2><div class="muted">建立班級及將既有學生帳號加入班級</div></div>
-    <button class="btn primary" onclick="createClass()">＋ 新增班級</button></div>
-    <div class="grid">${classesCache.map(c=>`
-      <div class="card">
-        <div class="row between"><h3>${escapeHtml(c.name)}</h3><span class="badge">${members.filter(m=>m.class_id===c.id).length} 位學生</span></div>
-        <button class="btn secondary small" onclick="manageMembers('${c.id}')">管理學生</button>
-      </div>`).join('')||'<div class="card empty">尚未建立班級</div>'}</div>`;
-}
-async function createClass() {
-  const name=prompt('請輸入班級名稱');
-  if(!name?.trim()) return;
-  try {
-    await queryOrThrow(db.from('classes').insert({name:name.trim()}));
-    toast('班級已建立');await teacherClasses();
-  } catch(err) { toast('建立失敗：'+err.message); }
-}
-async function manageMembers(classId) {
-  try {
-    const members=await queryOrThrow(db.from('class_members').select('student_id').eq('class_id',classId));
-    const ids=members.map(m=>m.student_id);
-    const students=await queryOrThrow(db.from('profiles').select('id,username,display_name').eq('role','student'));
-    showModal(`
-      <div class="modal-head"><h3>班級學生</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
-      <div class="field"><label>加入學生帳號</label>
-        <select id="memberSelect"><option value="">選擇學生</option>
-        ${students.filter(s=>!ids.includes(s.id)).map(s=>`<option value="${s.id}">${escapeHtml(s.display_name||s.username)} (${escapeHtml(s.username)})</option>`).join('')}
-        </select>
-      </div>
-      <button class="btn primary" onclick="addMember('${classId}')">加入班級</button>
-      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
-      <h4>目前學生</h4>
-      ${students.filter(s=>ids.includes(s.id)).map(s=>`
-        <div class="row between" style="padding:10px 0;border-bottom:1px solid var(--line)">
-          <span>${escapeHtml(s.display_name||s.username)}（${escapeHtml(s.username)}）</span>
-          <button class="btn danger small" onclick="removeMember('${classId}','${s.id}')">移除</button>
-        </div>`).join('')||'<div class="empty">尚無學生</div>'}`);
-  } catch(err) { toast(err.message); }
-}
-async function addMember(classId) {
-  const studentId=document.getElementById('memberSelect').value;
-  if(!studentId) return toast('請先選擇學生');
-  try {
-    await queryOrThrow(db.from('class_members').insert({class_id:classId,student_id:studentId}));
-    toast('已加入班級');await manageMembers(classId);
-  } catch(err) { toast('加入失敗：'+err.message); }
-}
-async function removeMember(classId,studentId) {
-  if(!confirm('確定將學生移出班級？')) return;
-  try {
-    await queryOrThrow(db.from('class_members').delete().eq('class_id',classId).eq('student_id',studentId));
-    toast('已移除');await manageMembers(classId);
-  } catch(err) { toast(err.message); }
+function renderExamQuestionPicker() {
+  document.getElementById('examQuestionPicker').innerHTML = questions.map(q=>`
+    <label class="option">
+      <input type="checkbox" class="exam-q-check" value="${q.id}">
+      <span>${escapeHtml(q.unit||'未分類')}｜${escapeHtml(q.content.slice(0,100))}</span>
+    </label>
+  `).join('') || '<p class="muted">請先建立題目</p>';
 }
 
-/* EXAMS */
-async function teacherExams() {
-  const exams=await queryOrThrow(db.from('exams').select('*').order('created_at',{ascending:false}));
-  document.getElementById('mainContent').innerHTML=`
-    <div class="page-head"><div><h2>考卷管理</h2><div class="muted">建立考卷、選擇題目及派發測驗</div></div>
-    <button class="btn primary" onclick="createExam()">＋ 建立考卷</button></div>
-    <div class="card"><div class="table-wrap"><table>
-      <thead><tr><th>考卷名稱</th><th>科目</th><th>時間</th><th>狀態</th><th>操作</th></tr></thead>
-      <tbody>${exams.map(ex=>`
-        <tr><td>${escapeHtml(ex.title)}</td><td>${escapeHtml(ex.subject||'')}</td>
-        <td>${ex.duration_minutes} 分鐘</td>
-        <td><span class="badge ${ex.is_published?'green':'gray'}">${ex.is_published?'已發布':'草稿'}</span></td>
-        <td><div class="row">
-          <button class="btn secondary small" onclick="assignExam('${ex.id}')">派發</button>
-          <button class="btn outline small" onclick="togglePublish('${ex.id}',${!ex.is_published})">${ex.is_published?'取消發布':'發布'}</button>
-        </div></td></tr>`).join('')||'<tr><td colspan="5" class="empty">尚無考卷</td></tr>'}</tbody>
-    </table></div></div>`;
-}
 async function createExam() {
-  try {
-    questionsCache=await queryOrThrow(db.from('questions').select('*').order('created_at',{ascending:false}));
-    if(!questionsCache.length) return toast('請先建立題庫題目');
-    showModal(`
-      <div class="modal-head"><h3>建立考卷</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
-      <form id="examForm">
-        <div class="form-grid">
-          <div class="field"><label>考卷名稱</label><input id="examTitle" required></div>
-          <div class="field"><label>科目</label><input id="examSubject" required></div>
-          <div class="field"><label>作答時間（分鐘）</label><input id="examDuration" type="number" min="1" value="60" required></div>
-          <div class="field"><label>開始時間（選填）</label><input id="examStart" type="datetime-local"></div>
-          <div class="field"><label>截止時間（選填）</label><input id="examEnd" type="datetime-local"></div>
-        </div>
-        <div class="field"><label>題目選擇</label>
-          <div style="max-height:260px;overflow:auto">
-          ${questionsCache.map(q=>`
-            <label class="answer-option">
-              <input type="checkbox" name="examQuestion" value="${q.id}">
-              <span><b>${escapeHtml(q.subject)}</b> · ${escapeHtml(q.content.slice(0,110))}</span>
-            </label>`).join('')}
-          </div>
-        </div>
-        <button class="btn primary full">建立考卷</button>
-      </form>`);
-    document.getElementById('examForm').addEventListener('submit',saveExam);
-  } catch(err) { toast(err.message); }
-}
-async function saveExam(e) {
-  e.preventDefault();
-  try {
-    const selected=[...document.querySelectorAll('input[name="examQuestion"]:checked')].map(x=>x.value);
-    if(!selected.length) throw new Error('至少選擇一道題目');
-    const payload={
-      title:document.getElementById('examTitle').value.trim(),
-      subject:document.getElementById('examSubject').value.trim(),
-      duration_minutes:Number(document.getElementById('examDuration').value),
-      start_at:document.getElementById('examStart').value?new Date(document.getElementById('examStart').value).toISOString():null,
-      end_at:document.getElementById('examEnd').value?new Date(document.getElementById('examEnd').value).toISOString():null,
-      is_published:false,show_answers:false,created_by:currentUser.id
-    };
-    const exam=await queryOrThrow(db.from('exams').insert(payload).select().single());
-    const links=selected.map((id,i)=>({exam_id:exam.id,question_id:id,question_order:i+1,points:100/selected.length}));
-    await queryOrThrow(db.from('exam_questions').insert(links));
-    closeModal();toast('考卷建立成功');await teacherExams();
-  } catch(err) { toast('建立失敗：'+err.message); }
-}
-async function togglePublish(id,published) {
-  try {
-    await queryOrThrow(db.from('exams').update({is_published:published}).eq('id',id));
-    toast(published?'考卷已發布':'已取消發布');await teacherExams();
-  } catch(err) { toast(err.message); }
-}
-async function assignExam(examId) {
-  try {
-    const [classes,students,existing]=await Promise.all([
-      db.from('classes').select('*'),
-      db.from('profiles').select('id,username,display_name').eq('role','student'),
-      db.from('exam_assignments').select('*').eq('exam_id',examId)
-    ]);
-    if(classes.error) throw classes.error;
-    if(students.error) throw students.error;
-    if(existing.error) throw existing.error;
-    showModal(`
-      <div class="modal-head"><h3>派發考卷</h3><button class="btn outline small" onclick="closeModal()">關閉</button></div>
-      <div class="field"><label>指定班級</label>
-        <select id="assignClass"><option value="">選擇班級</option>
-        ${classes.data.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}</select>
-      </div>
-      <button class="btn primary" onclick="assignClassExam('${examId}')">派發給班級</button>
-      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
-      <div class="field"><label>指定個別學生</label>
-        <select id="assignStudent"><option value="">選擇學生</option>
-        ${students.data.map(s=>`<option value="${s.id}">${escapeHtml(s.display_name||s.username)} (${escapeHtml(s.username)})</option>`).join('')}</select>
-      </div>
-      <button class="btn secondary" onclick="assignStudentExam('${examId}')">派發給學生</button>
-      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
-      <h4>目前派發紀錄</h4>
-      ${existing.data.map(a=>`<div class="muted" style="padding:6px 0">${a.class_id?'班級派發':'個別學生派發'} · ${escapeHtml(a.class_id||a.student_id)}</div>`).join('')||'<div class="empty">尚無派發紀錄</div>'}`);
-  } catch(err) { toast('載入派發資訊失敗：'+err.message); }
-}
-async function assignClassExam(examId) {
-  const classId=document.getElementById('assignClass').value;
-  if(!classId) return toast('請選擇班級');
-  try {
-    await queryOrThrow(db.from('exam_assignments').insert({exam_id:examId,class_id:classId,assigned_by:currentUser.id}));
-    toast('已派發給班級');await assignExam(examId);
-  } catch(err) { toast('派發失敗：'+err.message); }
-}
-async function assignStudentExam(examId) {
-  const studentId=document.getElementById('assignStudent').value;
-  if(!studentId) return toast('請選擇學生');
-  try {
-    await queryOrThrow(db.from('exam_assignments').insert({exam_id:examId,student_id:studentId,assigned_by:currentUser.id}));
-    toast('已派發給學生');await assignExam(examId);
-  } catch(err) { toast('派發失敗：'+err.message); }
+  const title = document.getElementById('examTitle').value.trim();
+  const duration = Number(document.getElementById('examDuration').value);
+  const selected = [...document.querySelectorAll('.exam-q-check:checked')].map(x=>x.value);
+  if (!title || !Number.isInteger(duration) || duration < 1 || !selected.length)
+    return notify('請填寫測驗名稱、時間並選擇題目');
+
+  const start = localDateValue(document.getElementById('examStart').value);
+  const end = localDateValue(document.getElementById('examEnd').value);
+  if (start && end && new Date(end) <= new Date(start))
+    return notify('截止時間必須晚於開始時間');
+
+  const units = document.getElementById('examUnits').value
+    .split(',').map(x=>x.trim()).filter(Boolean);
+
+  const {data:exam,error} = await db.from('exams').insert({
+    title,
+    subject:document.getElementById('examSubject').value,
+    units,
+    duration_minutes:duration,
+    start_at:start,
+    end_at:end,
+    is_published:false,
+    show_answers:false,
+    created_by:currentUser.id
+  }).select().single();
+
+  if (error) return notify('建立測驗失敗：'+error.message);
+
+  const links = selected.map((id,index)=>({
+    exam_id:exam.id,
+    question_id:id,
+    question_order:index+1,
+    points:1
+  }));
+
+  const {error:linkError} = await db.from('exam_questions').insert(links);
+  if (linkError) {
+    await db.from('exams').delete().eq('id',exam.id);
+    return notify('題目加入失敗：'+linkError.message);
+  }
+
+  notify('測驗建立成功，尚未發布');
+  await loadExams();
 }
 
-/* STUDENT */
-async function studentHome() {
-  const exams=await queryOrThrow(db.rpc('get_assigned_exams'));
-  const attempts=await queryOrThrow(db.from('attempts').select('id,status,score').eq('student_id',currentUser.id));
-  document.getElementById('mainContent').innerHTML=`
-    <div class="page-head"><div><h2>學生總覽</h2><div class="muted">歡迎，${escapeHtml(currentProfile.display_name||currentProfile.username)}</div></div></div>
-    <div class="grid">
-      <div class="card"><div class="stat-label">可參加測驗</div><div class="stat">${exams.length}</div></div>
-      <div class="card"><div class="stat-label">已完成測驗</div><div class="stat">${attempts.filter(a=>a.status==='submitted').length}</div></div>
-      <div class="card"><div class="stat-label">進行中</div><div class="stat">${attempts.filter(a=>a.status==='in_progress').length}</div></div>
+async function loadExams() {
+  const {data,error} = await db.from('exams')
+    .select('id,title,subject,units,duration_minutes,start_at,end_at,is_published')
+    .order('created_at',{ascending:false});
+  if (error) return notify(error.message);
+  exams = data || [];
+  document.getElementById('examList').innerHTML = exams.map(e=>`
+    <div class="item">
+      <h3>${escapeHtml(e.title)}</h3>
+      <p>${escapeHtml(e.subject)} · ${e.duration_minutes} 分鐘</p>
+      <p class="muted">單元：${escapeHtml((e.units||[]).join('、')||'未指定')}</p>
+      <span class="badge">${e.is_published?'已發布':'未發布'}</span>
+      <div class="actions">
+        <button onclick="togglePublish('${e.id}',${!e.is_published})">${e.is_published?'取消發布':'發布'}</button>
+        <button class="secondary" onclick="printExam('${e.id}',false)">學生版列印</button>
+        <button class="secondary" onclick="printExam('${e.id}',true)">教師版列印</button>
+      </div>
     </div>
-    <div class="card"><h3 class="section-title">開始測驗</h3><button class="btn primary" onclick="goPage('myexams')">查看我的測驗</button></div>`;
+  `).join('') || '<p class="muted">尚無測驗</p>';
 }
-async function studentExams() {
-  const exams=await queryOrThrow(db.rpc('get_assigned_exams'));
-  const attempts=await queryOrThrow(db.from('attempts').select('exam_id,status').eq('student_id',currentUser.id));
-  const main=document.getElementById('mainContent');
-  main.innerHTML=`
-    <div class="page-head"><div><h2>我的測驗</h2><div class="muted">以下是已分配給你的考試</div></div></div>
-    ${exams.map(ex=>{
-      const attempt=attempts.find(a=>a.exam_id===ex.exam_id);
-      const expired=ex.end_at && new Date(ex.end_at)<new Date();
-      const notStarted=ex.start_at && new Date(ex.start_at)>new Date();
-      const status=attempt?.status==='submitted'?'已完成':attempt?.status==='in_progress'?'作答中':expired?'已截止':notStarted?'尚未開始':'尚未作答';
-      return `<div class="card row between">
-        <div><h3 style="margin:0 0 8px">${escapeHtml(ex.title)}</h3>
-          <div class="muted">${escapeHtml(ex.subject||'')} · ${ex.duration_minutes} 分鐘</div>
-          <div class="muted" style="margin-top:7px">開始：${formatDate(ex.start_at)}　截止：${formatDate(ex.end_at)}</div>
-        </div>
-        <div class="row"><span class="badge">${status}</span>
-        <button class="btn primary" ${attempt?.status==='submitted'||expired||notStarted?'disabled':''}
-          onclick="beginExam('${ex.exam_id}',${ex.duration_minutes},'${escapeHtml(ex.title)}')">${attempt?.status==='in_progress'?'繼續測驗':'開始測驗'}</button></div>
-      </div>`;
-    }).join('')||'<div class="card empty">目前沒有分配給你的考試</div>'}`;
+
+async function togglePublish(id,value) {
+  const {error} = await db.from('exams').update({is_published:value}).eq('id',id);
+  if (error) return notify(error.message);
+  notify(value?'測驗已發布':'已取消發布');
+  await loadExams();
 }
-async function beginExam(examId,duration,title) {
-  try {
-    const attemptId=await queryOrThrow(db.rpc('start_exam',{p_exam_id:examId}));
-    activeAttempt=attemptId;
-    activeExam={id:examId,duration,title};
-    activeQuestions=await queryOrThrow(db.rpc('get_exam_questions',{p_attempt_id:attemptId}));
-    if(!activeQuestions.length) throw new Error('這份考卷沒有題目');
-    selectedAnswers={};
-    currentQuestionIndex=0;
-    remainingSeconds=duration*60;
-    renderExam();
-    startTimer();
-  } catch(err) { toast('無法開始測驗：'+err.message); }
+
+async function printExam(id,withAnswers) {
+  const {data:exam,error:eError} = await db.from('exams')
+    .select('*').eq('id',id).single();
+  if (eError) return notify(eError.message);
+
+  const {data:links,error:lError} = await db.from('exam_questions')
+    .select('question_id,question_order,points')
+    .eq('exam_id',id).order('question_order');
+  if (lError) return notify(lError.message);
+
+  const ids = links.map(x=>x.question_id);
+  const {data:qs,error:qError} = await db.from('questions')
+    .select('*').in('id',ids);
+  if (qError) return notify(qError.message);
+
+  const map = Object.fromEntries(qs.map(q=>[q.id,q]));
+  const html = links.map((link,index)=>{
+    const q = map[link.question_id];
+    const options = (q.options||[]).map((o,i)=>
+      `<p>${i+1}. ${escapeHtml(o)}</p>`).join('');
+    const answer = withAnswers
+      ? `<p><b>正確答案：</b>${escapeHtml(JSON.stringify(q.correct_answer))}</p>
+         <p><b>解析：</b>${escapeHtml(q.explanation||'無')}</p>` : '';
+    const image = q.image_url ? `<img src="${escapeHtml(q.image_url)}" style="max-width:100%;max-height:260px">` : '';
+    return `<article style="page-break-inside:avoid;margin:20px 0">
+      <b>${index+1}. ${escapeHtml(q.content)}</b>${image}${options}${answer}
+    </article>`;
+  }).join('');
+
+  const w = window.open('','_blank');
+  if (!w) return notify('瀏覽器封鎖新視窗，請允許彈出視窗');
+  w.document.write(`
+    <!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">
+    <title>${escapeHtml(exam.title)}</title>
+    <style>
+    body{font-family:Arial,sans-serif;padding:25px;color:#222}
+    @page{size:A4;margin:18mm}
+    article{line-height:1.7}
+    </style></head><body>
+    <h1>${escapeHtml(exam.title)}</h1>
+    <p>${escapeHtml(exam.subject)}　作答時間：${exam.duration_minutes} 分鐘</p>
+    ${html}
+    <script>window.onload=()=>setTimeout(()=>window.print(),700)<\/script>
+    </body></html>`);
+  w.document.close();
 }
-function startTimer() {
-  if(examTimer) clearInterval(examTimer);
-  examTimer=setInterval(()=>{
-    remainingSeconds--;
-    const el=document.getElementById('timerDisplay');
-    if(el) el.textContent=timerText();
-    if(remainingSeconds<=0) {
-      clearInterval(examTimer);
-      toast('時間到，正在提交測驗');
-      submitExam(true);
-    }
-  },1000);
+
+async function loadExamOptions() {
+  await loadExams();
+  document.getElementById('resultExam').innerHTML =
+    '<option value="">請選擇測驗</option>' +
+    exams.map(e=>`<option value="${e.id}">${escapeHtml(e.title)}</option>`).join('');
 }
-function timerText() {
-  const m=Math.floor(Math.max(0,remainingSeconds)/60);
-  const s=Math.max(0,remainingSeconds)%60;
-  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+async function loadResults() {
+  const id = document.getElementById('resultExam').value;
+  if (!id) return;
+  const [resultResponse,statsResponse] = await Promise.all([
+    db.rpc('get_exam_results',{p_exam_id:id}),
+    db.rpc('get_exam_question_stats',{p_exam_id:id})
+  ]);
+  if (resultResponse.error) return notify(resultResponse.error.message);
+  if (statsResponse.error) return notify(statsResponse.error.message);
+
+  const rows = resultResponse.data || [];
+  document.getElementById('resultsTable').innerHTML = `
+    <table><thead><tr><th>學生</th><th>分數</th><th>狀態</th><th>交卷時間</th><th>操作</th></tr></thead>
+    <tbody>${rows.map(r=>`
+      <tr>
+        <td>${escapeHtml(r.student_name)}</td>
+        <td>${r.score??'—'} / ${r.total_points??'—'}</td>
+        <td>${escapeHtml(r.status)}</td>
+        <td>${r.submitted_at?new Date(r.submitted_at).toLocaleString():'—'}</td>
+        <td>${r.status==='submitted'?`<button class="danger" onclick="deleteAttempt('${r.attempt_id}')">刪除作答</button>`:''}</td>
+      </tr>`).join('')}</tbody></table>`;
+
+  document.getElementById('questionStats').innerHTML =
+    (statsResponse.data||[]).map(s=>`
+      <div class="item">
+        <b>第 ${s.question_order} 題</b>
+        <p>${escapeHtml(s.question_content.slice(0,130))}</p>
+        <p>作答：${s.submitted_count} 人　答對：${s.correct_count} 人　答錯：${s.incorrect_count} 人</p>
+        <span class="badge">答對率 ${s.accuracy}%</span>
+      </div>`).join('');
 }
-function renderExam() {
-  const q=activeQuestions[currentQuestionIndex];
-  const opts=q.options||[];
-  const selected=selectedAnswers[q.question_id];
-  document.getElementById('mainContent').innerHTML=`
-    <div class="exam-layout">
-      <div class="exam-top">
-        <div><b>${escapeHtml(activeExam.title)}</b><div class="muted">第 ${currentQuestionIndex+1} / ${activeQuestions.length} 題</div></div>
-        <div><div class="muted">剩餘時間</div><div class="timer" id="timerDisplay">${timerText()}</div></div>
-      </div>
-      <div class="card exam-question">
-        <div class="row between"><span class="badge">${q.question_type==='multiple'?'多選題':'單選題'}</span><span class="muted">${q.points} 分</span></div>
-        <div class="question-content" style="margin:20px 0">${escapeHtml(q.content).replace(/\n/g,'<br>')}</div>
-        ${q.image_url?`<img src="${escapeHtml(q.image_url)}" style="max-width:100%;border-radius:10px;margin-bottom:15px">`:''}
-        <div id="answerOptions">
-          ${opts.map((o,i)=>`
-            <label class="answer-option">
-              <input type="${q.question_type==='multiple'?'checkbox':'radio'}"
-                name="answer" value="${i}" ${Array.isArray(selected)?(selected.includes(i)?'checked':''):(selected===i?'checked':'')}
-                onchange="changeAnswer(${i},${q.question_type==='multiple'})">
-              <span><b>${String.fromCharCode(65+i)}.</b> ${escapeHtml(o)}</span>
-            </label>`).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <div class="row between"><b>題目導航</b><span class="muted">綠色代表已作答</span></div>
-        <div class="qnav">${activeQuestions.map((item,i)=>`
-          <button class="${i===currentQuestionIndex?'current':''} ${selectedAnswers[item.question_id]!==undefined?'done':''}"
-            onclick="jumpQuestion(${i})">${i+1}</button>`).join('')}</div>
-        <div class="exam-footer">
-          <button class="btn outline" onclick="jumpQuestion(${currentQuestionIndex-1})" ${currentQuestionIndex===0?'disabled':''}>上一題</button>
-          ${currentQuestionIndex<activeQuestions.length-1
-            ?`<button class="btn primary" onclick="jumpQuestion(${currentQuestionIndex+1})">下一題</button>`
-            :`<button class="btn success" onclick="confirmSubmit()">完成並交卷</button>`}
-        </div>
-      </div>
+
+async function deleteAttempt(id) {
+  if (!confirm('確定刪除此學生的作答紀錄？刪除後學生可重新作答。')) return;
+  const {error} = await db.from('attempts').delete().eq('id',id);
+  if (error) return notify(error.message);
+  notify('作答紀錄已刪除');
+  await loadResults();
+}
+
+async function loadAssignedExams() {
+  const {data,error} = await db.rpc('get_assigned_exams');
+  if (error) return notify(error.message);
+  document.getElementById('assignedExams').innerHTML = (data||[]).map(e=>`
+    <div class="item">
+      <h3>${escapeHtml(e.title)}</h3>
+      <p>${escapeHtml(e.subject)} · ${e.duration_minutes} 分鐘</p>
+      <p class="muted">${e.start_at?'開始：'+new Date(e.start_at).toLocaleString():''}</p>
+      <button onclick="startExam('${e.exam_id}')">開始／繼續測驗</button>
+    </div>
+  `).join('') || '<p class="muted">目前沒有指派給你的測驗</p>';
+}
+
+async function startExam(examId) {
+  const {data:attemptId,error} = await db.rpc('start_exam',{p_exam_id:examId});
+  if (error) return notify(error.message);
+
+  activeAttempt = attemptId;
+  const {data:attempt,error:attemptError} = await db.from('attempts')
+    .select('deadline_at,exam_id')
+    .eq('id',attemptId).single();
+  if (attemptError) return notify(attemptError.message);
+
+  activeExam = examId;
+  deadlineAt = attempt.deadline_at;
+  if (!deadlineAt) return notify('作答期限資料不存在，請聯絡教師');
+
+  const {data:exam} = await db.from('exams').select('title').eq('id',examId).single();
+  document.getElementById('takingTitle').textContent = exam?.title || '線上測驗';
+
+  const {data,error:qError} = await db.rpc('get_exam_questions',{p_attempt_id:attemptId});
+  if (qError) return notify(qError.message);
+  activeQuestions = data || [];
+
+  const {data:answers,error:aError} = await db.from('answers')
+    .select('question_id,selected_answer')
+    .eq('attempt_id',attemptId);
+  if (aError) return notify(aError.message);
+
+  savedAnswers = {};
+  (answers||[]).forEach(a=>savedAnswers[a.question_id]=a.selected_answer);
+
+  document.getElementById('s-available').classList.add('hidden');
+  document.getElementById('s-history').classList.add('hidden');
+  document.getElementById('reviewArea').classList.add('hidden');
+  document.getElementById('takingExam').classList.remove('hidden');
+
+  renderTakingQuestions();
+  startTimer();
+}
+
+function renderTakingQuestions() {
+  document.getElementById('takingQuestions').innerHTML = activeQuestions.map((q,index)=>{
+    const selected = savedAnswers[q.question_id];
+    return `<div class="question">
+      <h3>${index+1}. ${escapeHtml(q.content)}</h3>
+      ${q.image_url?`<img src="${escapeHtml(q.image_url)}" style="max-width:100%;max-height:260px">`:''}
+      ${(q.options||[]).map((option,i)=>{
+        const checked = Array.isArray(selected)
+          ? selected.includes(i)
+          : selected === i;
+        return `<label class="option">
+          <input type="${q.question_type==='multiple'?'checkbox':'radio'}"
+            name="answer-${q.question_id}" value="${i}" ${checked?'checked':''}
+            onchange="changeAnswer('${q.question_id}','${q.question_type}')">
+          <span>${i+1}. ${escapeHtml(option)}</span>
+        </label>`;
+      }).join('')}
     </div>`;
-  renderMath();
+  }).join('');
+  if (window.MathJax) MathJax.typesetPromise();
 }
-async function changeAnswer(index,multiple) {
-  const q=activeQuestions[currentQuestionIndex];
-  let value;
-  if(multiple) {
-    const old=Array.isArray(selectedAnswers[q.question_id])?[...selectedAnswers[q.question_id]]:[];
-    value=old.includes(index)?old.filter(x=>x!==index):[...old,index];
-    value.sort((a,b)=>a-b);
-  } else value=index;
-  selectedAnswers[q.question_id]=value;
-  try {
-    saving=true;
-    await queryOrThrow(db.rpc('save_exam_answer',{
-      p_attempt_id:activeAttempt,
-      p_question_id:q.question_id,
-      p_selected_answer: value
-    }));
-  } catch(err) { toast('答案儲存失敗：'+err.message); }
-  finally { saving=false; }
-  renderExam();
+
+async function changeAnswer(questionId,type) {
+  const inputs = [...document.querySelectorAll(`[name="answer-${questionId}"]:checked`)];
+  const value = type === 'multiple'
+    ? inputs.map(x=>Number(x.value)).sort((a,b)=>a-b)
+    : (inputs.length ? Number(inputs[0].value) : null);
+
+  if (value === null) return;
+  savedAnswers[questionId] = value;
+
+  const {error} = await db.rpc('save_exam_answer',{
+    p_attempt_id:activeAttempt,
+    p_question_id:questionId,
+    p_selected_answer:value
+  });
+  if (error) notify('答案儲存失敗：'+error.message);
 }
-function jumpQuestion(index) {
-  if(index<0||index>=activeQuestions.length) return;
-  currentQuestionIndex=index;renderExam();
+
+function startTimer() {
+  clearInterval(timerHandle);
+  const tick = async () => {
+    const remaining = Math.max(0,new Date(deadlineAt).getTime()-Date.now());
+    const minutes = Math.floor(remaining/60000);
+    const seconds = Math.floor((remaining%60000)/1000);
+    document.getElementById('timer').textContent =
+      `剩餘時間：${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+    if (remaining <= 0) {
+      clearInterval(timerHandle);
+      notify('作答時間已結束，正在交卷');
+      await submitCurrentExam();
+    }
+  };
+  tick();
+  timerHandle = setInterval(tick,1000);
 }
-function confirmSubmit() {
-  const unanswered=activeQuestions.filter(q=>selectedAnswers[q.question_id]===undefined).length;
-  if(!confirm(`確定要交卷嗎？${unanswered?`還有 ${unanswered} 題未作答。`:''}`)) return;
-  submitExam(false);
-}
-async function submitExam(auto) {
-  if(saving) {
-    toast('答案儲存中，請稍候再交卷');
+
+async function submitCurrentExam() {
+  if (!activeAttempt) return;
+  if (!confirm('確定要交卷嗎？交卷後不能修改答案。')) return;
+  clearInterval(timerHandle);
+  const {data,error} = await db.rpc('submit_exam',{p_attempt_id:activeAttempt});
+  if (error) {
+    notify('交卷失敗：'+error.message);
     return;
   }
-  try {
-    if(examTimer) clearInterval(examTimer);
-    const result=await queryOrThrow(db.rpc('submit_exam',{p_attempt_id:activeAttempt}));
-    document.getElementById('mainContent').innerHTML=`
-      <div class="exam-layout">
-        <div class="card" style="text-align:center;padding:42px 20px">
-          <div class="logo" style="margin:0 auto 18px">✓</div>
-          <h2>測驗已${auto?'自動':'成功'}提交</h2>
-          <div class="muted">你的作答已完成並由系統計分</div>
-          <div class="stat" style="font-size:42px;margin-top:25px">${result[0].score} / ${result[0].total_points}</div>
-          <div class="muted">本次測驗成績</div>
-          <button class="btn primary" style="margin-top:25px" onclick="goPage('history')">查看測驗紀錄</button>
-        </div>
-      </div>`;
-    activeAttempt=null;
-  } catch(err) {
-    toast('交卷失敗：'+err.message);
-    if(activeAttempt) startTimer();
-  }
+  const result = Array.isArray(data)?data[0]:data;
+  notify(`交卷完成！成績：${result?.score ?? '—'} / ${result?.total_points ?? '—'}`);
+  activeAttempt = null;
+  document.getElementById('takingExam').classList.add('hidden');
+  await loadStudentHistory();
+  studentTab('history',document.querySelector('#studentArea .tabs button:nth-child(2)'));
 }
 
-/* HISTORY & SCORES */
-async function studentHistory() {
-  const attempts=await queryOrThrow(
-    db.from('attempts')
-      .select('id,exam_id,started_at,submitted_at,score,total_points,status')
-      .eq('student_id',currentUser.id)
-      .order('started_at',{ascending:false})
-  );
-  const examIds=[...new Set(attempts.map(a=>a.exam_id))];
-  const exams=examIds.length?await queryOrThrow(db.from('exams').select('id,title,subject').in('id',examIds)):[];
-  document.getElementById('mainContent').innerHTML=`
-    <div class="page-head"><div><h2>測驗紀錄</h2><div class="muted">查看過去的作答紀錄與成績</div></div></div>
-    <div class="card"><div class="table-wrap"><table>
-      <thead><tr><th>考卷</th><th>開始時間</th><th>提交時間</th><th>成績</th><th>狀態</th></tr></thead>
-      <tbody>${attempts.map(a=>{
-        const ex=exams.find(e=>e.id===a.exam_id);
-        return `<tr><td>${escapeHtml(ex?.title||'考卷')}</td>
-          <td>${formatDate(a.started_at)}</td><td>${formatDate(a.submitted_at)}</td>
-          <td>${a.score??'—'} / ${a.total_points??'—'}</td>
-          <td><span class="badge">${a.status==='submitted'?'已提交':a.status==='in_progress'?'作答中':'已逾時'}</span></td></tr>`;
-      }).join('')||'<tr><td colspan="5" class="empty">尚無測驗紀錄</td></tr>'}</tbody>
-    </table></div></div>`;
-}
-async function teacherScores() {
-  const attempts=await queryOrThrow(db.from('attempts').select('*').order('started_at',{ascending:false}));
-  const [profiles,exams]=await Promise.all([
-    db.from('profiles').select('id,username,display_name'),
-    db.from('exams').select('id,title')
-  ]);
-  if(profiles.error) throw profiles.error;
-  if(exams.error) throw exams.error;
-  document.getElementById('mainContent').innerHTML=`
-    <div class="page-head"><div><h2>成績查詢</h2><div class="muted">查看所有學生的測驗成績</div></div></div>
-    <div class="card"><div class="table-wrap"><table>
-      <thead><tr><th>學生</th><th>考卷</th><th>開始時間</th><th>成績</th><th>狀態</th><th>操作</th></tr></thead>
-      <tbody>${attempts.map(a=>{
-        const p=profiles.data.find(x=>x.id===a.student_id);
-        const ex=exams.data.find(x=>x.id===a.exam_id);
-        return `<tr><td>${escapeHtml(p?.display_name||p?.username||'')}</td>
-          <td>${escapeHtml(ex?.title||'')}</td><td>${formatDate(a.started_at)}</td>
-          <td>${a.score??'—'} / ${a.total_points??'—'}</td>
-          <td>${a.status}</td>
-          <td><button class="btn danger small" onclick="deleteAttempt('${a.id}')">刪除紀錄</button></td></tr>`;
-      }).join('')||'<tr><td colspan="6" class="empty">尚無成績</td></tr>'}</tbody>
-    </table></div></div>`;
-}
-async function deleteAttempt(id) {
-  if(!confirm('確定刪除此學生的這次作答紀錄？刪除後學生可以重新作答。')) return;
-  try {
-    await queryOrThrow(db.from('attempts').delete().eq('id',id));
-    toast('作答紀錄已刪除');await teacherScores();
-  } catch(err) { toast('刪除失敗：'+err.message); }
+async function loadStudentHistory() {
+  const {data,error} = await db.from('attempts')
+    .select('id,exam_id,score,total_points,status,started_at,submitted_at,exams(title)')
+    .eq('student_id',currentUser.id)
+    .order('started_at',{ascending:false});
+  if (error) return notify(error.message);
+
+  document.getElementById('studentHistory').innerHTML = (data||[]).map(a=>`
+    <div class="item">
+      <h3>${escapeHtml(a.exams?.title||'測驗')}</h3>
+      <p>${a.status==='submitted'?`成績：${a.score} / ${a.total_points}`:'作答中'}</p>
+      ${a.status==='submitted'?`<button onclick="showReview('${a.id}')">查看錯題檢討</button>`:''}
+    </div>
+  `).join('') || '<p class="muted">尚無測驗紀錄</p>';
 }
 
-/* RESTORE SESSION */
-(async function restoreSession() {
-  try {
-    const {data}=await db.auth.getSession();
-    if(data.session) {
-      currentUser=data.session.user;
-      await loadProfile();
-      await renderApp();
-    }
-  } catch(err) {
-    console.error(err);
+async function showReview(attemptId) {
+  const {data,error} = await db.rpc('get_student_review',{p_attempt_id:attemptId});
+  if (error) return notify(error.message);
+
+  document.getElementById('takingExam').classList.add('hidden');
+  document.getElementById('s-available').classList.add('hidden');
+  document.getElementById('s-history').classList.add('hidden');
+  document.getElementById('reviewArea').classList.remove('hidden');
+
+  document.getElementById('reviewContent').innerHTML = (data||[]).map((q,i)=>`
+    <div class="question">
+      <h3>${i+1}. ${escapeHtml(q.content)}</h3>
+      ${(q.options||[]).map((o,j)=>`
+        <p>${j+1}. ${escapeHtml(o)}</p>`).join('')}
+      <p><b>你的答案：</b>${escapeHtml(JSON.stringify(q.selected_answer??'未作答'))}</p>
+      <p><b>正確答案：</b>${escapeHtml(JSON.stringify(q.correct_answer))}</p>
+      <p><b>結果：</b>${q.is_correct?'答對':'答錯'}　得分：${q.earned_points}/${q.points}</p>
+      <p><b>解析：</b>${escapeHtml(q.explanation||'教師尚未提供解析')}</p>
+    </div>
+  `).join('');
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+function addOptionInit() {
+  renderOptionEditor();
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+  if (event === 'SIGNED_OUT') {
+    document.getElementById('app').classList.add('hidden');
+    document.getElementById('login').classList.remove('hidden');
   }
-})();
+});
+
+addOptionInit();
+restoreSession();
 </script>
 </body>
 </html>
